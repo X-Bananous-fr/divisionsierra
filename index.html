@@ -354,29 +354,23 @@
 
             presenceChannel
                 .on('presence', { event: 'sync' }, () => {
-                    console.log('👥 Présence sync');
+                    // Sync présence
                 })
                 .on('broadcast', { event: 'audio' }, (payload) => {
-                    console.log('🎵 Audio reçu de:', payload.payload?.from, 'userId:', payload.payload?.userId);
                     if (!isMuted) {
                         playAudio(payload.payload);
-                    } else {
-                        console.log('🔇 Audio ignoré (muté)');
                     }
                 })
                 .on('broadcast', { event: 'speaking' }, (payload) => {
-                    console.log('🎙️ Speaking status:', payload.payload);
                     handleSpeakingStatus(payload.payload);
                 })
                 .subscribe(async (status) => {
-                    console.log('📡 Status de souscription:', status);
                     if (status === 'SUBSCRIBED') {
                         await presenceChannel.track({ username, userId });
                         isConnected = true;
                         document.getElementById('configSection').style.display = 'none';
                         document.getElementById('radioInterface').classList.add('active');
                         document.getElementById('statusIndicator').textContent = `✅ Connecté sur ${channelName}`;
-                        console.log('✅ Connecté en tant que:', username, 'sur canal:', channelName);
                     } else if (status === 'CHANNEL_ERROR') {
                         throw new Error('Impossible de se connecter au canal');
                     }
@@ -485,7 +479,9 @@
             visualizeAudio();
 
             mediaRecorder = new MediaRecorder(stream, {
-                mimeType: 'audio/webm'
+                mimeType: MediaRecorder.isTypeSupported('audio/webm;codecs=opus') 
+                    ? 'audio/webm;codecs=opus' 
+                    : 'audio/webm'
             });
             audioChunks = [];
 
@@ -644,21 +640,18 @@
         }
     }
 
+    let audioQueue = [];
+    let isPlayingAudio = false;
+
     async function playAudio(data) {
-        if (data.userId === userId) {
-            console.log('⏭️ Audio ignoré (notre propre audio)');
-            return;
-        }
-        
-        console.log('🔊 Lecture audio de:', data.from);
+        if (data.userId === userId) return;
         
         try {
             const audio = new Audio(data.audio);
             audio.volume = 1.0;
             await audio.play();
-            console.log('✅ Audio joué avec succès');
         } catch (error) {
-            console.error('❌ Erreur lecture audio:', error);
+            console.error('Erreur lecture audio:', error);
         }
     }
 </script>
