@@ -345,28 +345,38 @@
                     presence: {
                         key: userId,
                     },
+                    broadcast: {
+                        self: true,
+                        ack: false
+                    }
                 },
             });
 
             presenceChannel
                 .on('presence', { event: 'sync' }, () => {
-                    // Sync présence
+                    console.log('👥 Présence sync');
                 })
                 .on('broadcast', { event: 'audio' }, (payload) => {
+                    console.log('🎵 Audio reçu de:', payload.payload?.from, 'userId:', payload.payload?.userId);
                     if (!isMuted) {
                         playAudio(payload.payload);
+                    } else {
+                        console.log('🔇 Audio ignoré (muté)');
                     }
                 })
                 .on('broadcast', { event: 'speaking' }, (payload) => {
+                    console.log('🎙️ Speaking status:', payload.payload);
                     handleSpeakingStatus(payload.payload);
                 })
                 .subscribe(async (status) => {
+                    console.log('📡 Status de souscription:', status);
                     if (status === 'SUBSCRIBED') {
                         await presenceChannel.track({ username, userId });
                         isConnected = true;
                         document.getElementById('configSection').style.display = 'none';
                         document.getElementById('radioInterface').classList.add('active');
                         document.getElementById('statusIndicator').textContent = `✅ Connecté sur ${channelName}`;
+                        console.log('✅ Connecté en tant que:', username, 'sur canal:', channelName);
                     } else if (status === 'CHANNEL_ERROR') {
                         throw new Error('Impossible de se connecter au canal');
                     }
@@ -505,13 +515,17 @@
                 reader.onloadend = async () => {
                     try {
                         const base64Audio = reader.result;
-                        await presenceChannel.send({
+                        console.log('📤 Envoi audio:', base64Audio.substring(0, 50) + '...', 'Taille:', audioBlob.size);
+                        
+                        const result = await presenceChannel.send({
                             type: 'broadcast',
                             event: 'audio',
-                            payload: { audio: base64Audio, from: username, userId }
+                            payload: { audio: base64Audio, from: username, userId, timestamp: Date.now() }
                         });
+                        
+                        console.log('✅ Audio envoyé, résultat:', result);
                     } catch (error) {
-                        console.error('Erreur envoi audio:', error);
+                        console.error('❌ Erreur envoi audio:', error);
                     }
                 };
                 
@@ -631,14 +645,20 @@
     }
 
     async function playAudio(data) {
-        if (data.userId === userId) return;
+        if (data.userId === userId) {
+            console.log('⏭️ Audio ignoré (notre propre audio)');
+            return;
+        }
+        
+        console.log('🔊 Lecture audio de:', data.from);
         
         try {
             const audio = new Audio(data.audio);
             audio.volume = 1.0;
             await audio.play();
+            console.log('✅ Audio joué avec succès');
         } catch (error) {
-            console.error('Erreur lecture audio:', error);
+            console.error('❌ Erreur lecture audio:', error);
         }
     }
 </script>
