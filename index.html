@@ -507,16 +507,25 @@
                 }
                 
                 const reader = new FileReader();
-                reader.readAsDataURL(audioBlob);
+                reader.readAsArrayBuffer(audioBlob);
                 reader.onloadend = async () => {
                     try {
-                        const base64Audio = reader.result;
-                        console.log('📤 Envoi audio:', base64Audio.substring(0, 50) + '...', 'Taille:', audioBlob.size);
+                        const arrayBuffer = reader.result;
+                        const uint8Array = new Uint8Array(arrayBuffer);
+                        const base64Audio = btoa(String.fromCharCode.apply(null, uint8Array));
+                        
+                        console.log('📤 Envoi audio, taille:', audioBlob.size, 'type:', audioBlob.type);
                         
                         const result = await presenceChannel.send({
                             type: 'broadcast',
                             event: 'audio',
-                            payload: { audio: base64Audio, from: username, userId, timestamp: Date.now() }
+                            payload: { 
+                                audio: base64Audio,
+                                mimeType: audioBlob.type,
+                                from: username, 
+                                userId, 
+                                timestamp: Date.now() 
+                            }
                         });
                         
                         console.log('✅ Audio envoyé, résultat:', result);
