@@ -4,665 +4,736 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Radio PTT</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <title>Calculateur de Compagnie BRM5</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #000000;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            color: white;
-            overflow: hidden;
-        }
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            padding-bottom: 120px;
-        }
-        .config-section {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 400px;
-            width: 100%;
-            margin-bottom: 30px;
-        }
-        .config-section h1 {
-            text-align: center;
-            color: white;
-            margin-bottom: 30px;
-            font-size: 32px;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: 600;
-            font-size: 14px;
-        }
-        input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            font-size: 16px;
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-            margin-bottom: 20px;
-            transition: all 0.3s;
-        }
-        input:focus {
-            outline: none;
-            border-color: #667eea;
-            background: rgba(255, 255, 255, 0.1);
-        }
-        input::placeholder {
-            color: rgba(255, 255, 255, 0.4);
-        }
-        .btn-connect {
-            width: 100%;
-            padding: 18px;
-            border: none;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            transition: all 0.3s;
-        }
-        .btn-connect:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
-        }
-        .btn-connect:disabled {
-            background: #444;
-            cursor: not-allowed;
-        }
-        .radio-interface {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            gap: 30px;
-            width: 100%;
-            max-width: 500px;
-        }
-        .radio-interface.active {
-            display: flex;
-        }
-        .status-indicator {
-            text-align: center;
-            padding: 15px 30px;
-            background: rgba(16, 185, 129, 0.2);
-            border: 2px solid #10b981;
-            border-radius: 50px;
-            font-size: 16px;
-            font-weight: 600;
-            color: #10b981;
-        }
-        .ptt-button {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            border: none;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            font-size: 24px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 10px 40px rgba(16, 185, 129, 0.4);
-            user-select: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .ptt-button:hover {
-            transform: scale(1.05);
-        }
-        .ptt-button:active {
-            transform: scale(0.95);
-        }
-        .ptt-button.speaking {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-            animation: pulse 1.5s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-            50% { box-shadow: 0 0 0 30px rgba(239, 68, 68, 0); }
-        }
-        .mute-button {
-            padding: 15px 40px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .mute-button:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.5);
-        }
-        .mute-button.muted {
-            background: rgba(239, 68, 68, 0.2);
-            border-color: #ef4444;
-            color: #ef4444;
-        }
-        .bottom-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 80px;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            padding: 0 30px;
-            z-index: 1000;
-        }
-        .speaker-info {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        .speaker-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: 700;
-            color: white;
-        }
-        .speaker-details {
-            display: flex;
-            flex-direction: column;
-        }
-        .speaker-label {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.5);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .speaker-name {
-            font-size: 18px;
-            font-weight: 600;
-            color: white;
-        }
-        .speaker-name.speaking {
-            color: #ef4444;
-        }
-        .audio-visualizer {
-            flex: 1;
-            max-width: 400px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 3px;
-        }
-        .audio-bar {
-            width: 4px;
-            background: linear-gradient(to top, #667eea, #764ba2);
-            border-radius: 2px;
-            transition: height 0.1s;
-            height: 10px;
-        }
-    </style>
-</head>
-<body>
-    <div class="main-content">
-        <div class="config-section" id="configSection">
-            <h1>📻 Radio PTT</h1>
 
 ```
-        <label>Votre pseudo</label>
-        <input type="text" id="username" placeholder="Entrez votre nom" autofocus>
-        
-        <label>Canal</label>
-        <input type="text" id="channel" value="general" placeholder="general">
-        
-        <button class="btn-connect" id="connectBtn" onclick="connectToRadio()">Se connecter</button>
-    </div>
+    body {
+        font-family: 'Rajdhani', sans-serif;
+        background: #0a0a0a;
+        color: #e0e0e0;
+        min-height: 100vh;
+    }
 
-    <div class="radio-interface" id="radioInterface">
-        <div class="status-indicator" id="statusIndicator">
-            ✅ Connecté
+    .navbar {
+        background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+        border-bottom: 2px solid #333;
+        padding: 15px 20px;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        overflow: hidden;
+    }
+
+    .navbar::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+        animation: shine 3s infinite;
+    }
+
+    @keyframes shine {
+        to { left: 100%; }
+    }
+
+    .navbar-content {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        z-index: 1;
+    }
+
+    .navbar-title {
+        font-size: clamp(1.3rem, 4vw, 2rem);
+        font-weight: 700;
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    }
+
+    .navbar-subtitle {
+        font-size: clamp(0.8rem, 2vw, 0.95rem);
+        color: #999;
+        font-weight: 400;
+    }
+
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .content-wrapper {
+        background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+        border-radius: 12px;
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+        overflow: hidden;
+        border: 1px solid #2a2a2a;
+    }
+
+    .content {
+        padding: clamp(15px, 3vw, 30px);
+    }
+
+    .section {
+        margin-bottom: 25px;
+        padding: clamp(15px, 3vw, 20px);
+        background: rgba(26, 26, 26, 0.6);
+        border-radius: 10px;
+        border: 1px solid #2a2a2a;
+        backdrop-filter: blur(10px);
+    }
+
+    .section h2 {
+        color: #fff;
+        margin-bottom: 20px;
+        font-size: clamp(1.2rem, 3vw, 1.8rem);
+        border-bottom: 2px solid #333;
+        padding-bottom: 10px;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .employee-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .employee {
+        background: rgba(15, 15, 15, 0.9);
+        padding: clamp(10px, 2vw, 15px);
+        border-radius: 8px;
+        border: 1px solid #2a2a2a;
+        display: grid;
+        grid-template-columns: auto 1fr auto auto auto;
+        gap: clamp(8px, 2vw, 15px);
+        align-items: center;
+        transition: all 0.3s;
+    }
+
+    .employee:hover {
+        border-color: #444;
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+    }
+
+    .employee-number {
+        font-weight: bold;
+        color: #fff;
+        font-size: clamp(1rem, 2.5vw, 1.2rem);
+        min-width: 30px;
+    }
+
+    .employee-controls {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .employee-info {
+        color: #999;
+        font-size: clamp(0.8rem, 2vw, 0.9rem);
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    select, input[type="number"] {
+        padding: clamp(8px, 2vw, 10px);
+        background: rgba(10, 10, 10, 0.9);
+        color: #fff;
+        border: 2px solid #2a2a2a;
+        border-radius: 5px;
+        font-size: clamp(0.85rem, 2vw, 1rem);
+        font-family: 'Rajdhani', sans-serif;
+        transition: all 0.3s;
+        width: 100%;
+    }
+
+    select:hover, input:hover {
+        border-color: #444;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+    }
+
+    select:focus, input:focus {
+        outline: none;
+        border-color: #555;
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    }
+
+    select option {
+        background: #0a0a0a;
+        color: #fff;
+    }
+
+    .btn {
+        padding: clamp(10px, 2vw, 12px) clamp(15px, 3vw, 25px);
+        background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+        color: #fff;
+        border: 1px solid #3a3a3a;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: clamp(0.85rem, 2vw, 1rem);
+        font-family: 'Rajdhani', sans-serif;
+        transition: all 0.3s;
+        font-weight: 600;
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+    }
+
+    .btn:hover {
+        background: linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .btn:active {
+        transform: translateY(0);
+    }
+
+    .btn-duplicate {
+        background: linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%);
+        border-color: #4a4a4a;
+        padding: clamp(6px, 1.5vw, 8px) clamp(10px, 2vw, 15px);
+        font-size: clamp(0.8rem, 2vw, 0.9rem);
+    }
+
+    .btn-duplicate:hover {
+        background: linear-gradient(135deg, #4a4a4a 0%, #3a3a3a 100%);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-remove {
+        background: linear-gradient(135deg, #3a1a1a 0%, #2a0a0a 100%);
+        border-color: #4a2a2a;
+        padding: clamp(6px, 1.5vw, 8px) clamp(10px, 2vw, 15px);
+        font-size: clamp(0.8rem, 2vw, 0.9rem);
+    }
+
+    .btn-remove:hover {
+        background: linear-gradient(135deg, #5a2a2a 0%, #3a1a1a 100%);
+        box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
+    }
+
+    .btn-add {
+        margin-top: 15px;
+        width: 100%;
+    }
+
+    .storage-input {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .storage-row {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .storage-input label {
+        font-weight: 600;
+        color: #ccc;
+    }
+
+    .storage-input input {
+        max-width: 150px;
+    }
+
+    .storage-note {
+        color: #888;
+        font-size: clamp(0.75rem, 2vw, 0.85rem);
+    }
+
+    .results {
+        background: linear-gradient(135deg, rgba(30, 30, 30, 0.8) 0%, rgba(20, 20, 20, 0.8) 100%);
+        border: 2px solid #2a2a2a;
+        padding: clamp(15px, 3vw, 25px);
+        border-radius: 10px;
+        margin-top: 30px;
+        backdrop-filter: blur(10px);
+    }
+
+    .results h2 {
+        color: #fff;
+        border-bottom: 2px solid #333;
+        margin-bottom: 20px;
+    }
+
+    .result-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: clamp(12px, 2vw, 20px);
+        margin-top: 20px;
+    }
+
+    .result-card {
+        background: rgba(15, 15, 15, 0.8);
+        padding: clamp(12px, 2.5vw, 20px);
+        border-radius: 8px;
+        border: 1px solid #2a2a2a;
+        transition: all 0.3s;
+    }
+
+    .result-card:hover {
+        border-color: #444;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+        transform: translateY(-3px);
+    }
+
+    .result-card h3 {
+        font-size: clamp(1rem, 2.5vw, 1.3rem);
+        margin-bottom: 15px;
+        border-bottom: 2px solid #2a2a2a;
+        padding-bottom: 8px;
+        color: #fff;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .result-value {
+        font-size: clamp(1.5rem, 4vw, 2rem);
+        font-weight: bold;
+        margin: 8px 0;
+        color: #fff;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+
+    .result-label {
+        font-size: clamp(0.8rem, 2vw, 0.9rem);
+        color: #999;
+    }
+
+    .resource-results {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 12px;
+        margin-top: 15px;
+    }
+
+    .resource-card {
+        background: rgba(10, 10, 10, 0.6);
+        padding: 12px;
+        border-radius: 8px;
+        text-align: center;
+        border: 1px solid #2a2a2a;
+    }
+
+    .warning {
+        background: rgba(60, 40, 20, 0.3);
+        border: 1px solid #5a4a2a;
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 15px;
+        color: #d4a574;
+        font-size: clamp(0.85rem, 2vw, 0.95rem);
+    }
+
+    .info-box {
+        background: rgba(30, 30, 30, 0.3);
+        border: 1px solid #3a3a3a;
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 15px;
+        color: #aaa;
+        font-size: clamp(0.85rem, 2vw, 0.95rem);
+    }
+
+    @media (max-width: 768px) {
+        .employee {
+            grid-template-columns: auto 1fr;
+            gap: 10px;
+        }
+
+        .employee-controls {
+            grid-column: 1 / -1;
+            grid-template-columns: 1fr;
+        }
+
+        .employee-info {
+            grid-column: 1 / -1;
+            text-align: left;
+        }
+
+        .btn-duplicate,
+        .btn-remove {
+            grid-column: 1 / -1;
+        }
+
+        .result-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .calc-button {
+        width: 100%;
+        margin-top: 20px;
+        padding: clamp(12px, 3vw, 15px);
+        font-size: clamp(1rem, 2.5vw, 1.2rem);
+    }
+
+    .employee-actions {
+        display: flex;
+        gap: 8px;
+    }
+</style>
+```
+
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div>
+                <div class="navbar-title">BRM5 COMPANY CALCULATOR</div>
+                <div class="navbar-subtitle">Headquarters Management System</div>
+            </div>
         </div>
+    </nav>
 
-        <button class="ptt-button" id="pttButton">
-            PARLER
-        </button>
+```
+<div class="container">
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="section">
+                <h2><i class="fas fa-users"></i> OPERATIONS PERSONNEL</h2>
+                <div id="operations-list" class="employee-list"></div>
+                <button class="btn btn-add" onclick="addEmployee('operations')">
+                    <i class="fas fa-plus"></i> ADD EMPLOYEE
+                </button>
+            </div>
 
-        <button class="mute-button" id="muteButton" onclick="toggleMute()">
-            🔊 Écoute activée
-        </button>
-    </div>
-</div>
+            <div class="section">
+                <h2><i class="fas fa-warehouse"></i> STORAGE CAPACITY</h2>
+                <div class="storage-input">
+                    <div class="storage-row">
+                        <label>Total storage capacity:</label>
+                        <input type="number" id="storage" value="100" min="0" max="300">
+                    </div>
+                    <div class="storage-note">
+                        <i class="fas fa-info-circle"></i> Maximum: 300 with max level building and S++ Logistics personnel
+                    </div>
+                </div>
+                <div class="info-box">
+                    <i class="fas fa-exclamation-triangle"></i> <strong>IMPORTANT:</strong> Storage fills continuously. If your production exceeds storage capacity, you must empty regularly to avoid losses. Calculator accounts for required daily emptying cycles.
+                </div>
+            </div>
 
-<div class="bottom-bar">
-    <div class="speaker-info">
-        <div class="speaker-avatar" id="speakerAvatar">-</div>
-        <div class="speaker-details">
-            <div class="speaker-label">En émission</div>
-            <div class="speaker-name" id="speakerName">Personne</div>
+            <button class="btn calc-button" onclick="calculate()">
+                <i class="fas fa-calculator"></i> CALCULATE REVENUE
+            </button>
+
+            <div id="results" class="results" style="display: none;">
+                <h2><i class="fas fa-chart-line"></i> PRODUCTION RESULTS</h2>
+                
+                <div id="storage-warning" class="warning" style="display: none;">
+                    <i class="fas fa-exclamation-triangle"></i> <strong>WARNING:</strong> <span id="warning-text"></span>
+                </div>
+
+                <div class="result-grid">
+                    <div class="result-card">
+                        <h3><i class="fas fa-dollar-sign"></i> REVENUE (CREDITS)</h3>
+                        <div class="result-label">Per Hour</div>
+                        <div class="result-value" id="revenue-hour">0</div>
+                        <div class="result-label">Per Day</div>
+                        <div class="result-value" id="revenue-day">0</div>
+                        <div class="result-label">Per Week</div>
+                        <div class="result-value" id="revenue-week">0</div>
+                        <div class="result-label">Per Month</div>
+                        <div class="result-value" id="revenue-month">0</div>
+                        <div class="result-label">Per Year</div>
+                        <div class="result-value" id="revenue-year">0</div>
+                    </div>
+
+                    <div class="result-card">
+                        <h3><i class="fas fa-hammer"></i> CONSTRUCTION MATERIALS</h3>
+                        <div class="resource-results">
+                            <div class="resource-card">
+                                <div class="result-label">Per Hour</div>
+                                <div class="result-value" id="cmat-hour">0</div>
+                            </div>
+                            <div class="resource-card">
+                                <div class="result-label">Per Day</div>
+                                <div class="result-value" id="cmat-day">0</div>
+                            </div>
+                            <div class="resource-card">
+                                <div class="result-label">Per Week</div>
+                                <div class="result-value" id="cmat-week">0</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="result-card">
+                        <h3><i class="fas fa-gas-pump"></i> FUEL</h3>
+                        <div class="resource-results">
+                            <div class="resource-card">
+                                <div class="result-label">Per Hour</div>
+                                <div class="result-value" id="fuel-hour">0</div>
+                            </div>
+                            <div class="resource-card">
+                                <div class="result-label">Per Day</div>
+                                <div class="result-value" id="fuel-day">0</div>
+                            </div>
+                            <div class="resource-card">
+                                <div class="result-label">Per Week</div>
+                                <div class="result-value" id="fuel-week">0</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="result-card">
+                        <h3><i class="fas fa-gem"></i> PRECIOUS METALS</h3>
+                        <div class="resource-results">
+                            <div class="resource-card">
+                                <div class="result-label">Per Hour</div>
+                                <div class="result-value" id="pm-hour">0</div>
+                            </div>
+                            <div class="resource-card">
+                                <div class="result-label">Per Day</div>
+                                <div class="result-value" id="pm-day">0</div>
+                            </div>
+                            <div class="resource-card">
+                                <div class="result-label">Per Week</div>
+                                <div class="result-value" id="pm-week">0</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="result-card">
+                        <h3><i class="fas fa-cog"></i> EQUIPMENT</h3>
+                        <div class="resource-results">
+                            <div class="resource-card">
+                                <div class="result-label">Per Hour</div>
+                                <div class="result-value" id="equip-hour">0</div>
+                            </div>
+                            <div class="resource-card">
+                                <div class="result-label">Per Day</div>
+                                <div class="result-value" id="equip-day">0</div>
+                            </div>
+                            <div class="resource-card">
+                                <div class="result-label">Per Week</div>
+                                <div class="result-value" id="equip-week">0</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="audio-visualizer" id="audioVisualizer"></div>
 </div>
 
 <script>
-    // Configuration Supabase pré-remplie
-    const SUPABASE_URL = 'https://qbizevoudwduubyrlxnj.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFiaXpldm91ZHdkdXVieXJseG5qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2MDk4MTAsImV4cCI6MjA3NjE4NTgxMH0.HRKh0jpN_oiQ-23mqox0--oeGvvUwZLdo64S4WbRuHU';
+    const productionRates = {
+        'Construction Materials': {
+            'S++': 30, 'S+': 28, 'S': 26,
+            'A+': 24, 'A': 22, 'A-': 20,
+            'B+': 18, 'B': 16, 'B-': 14,
+            'C+': 12, 'C': 10, 'C-': 8,
+            'D+': 6, 'D': 4, 'D-': 2
+        },
+        'Fuel': {
+            'S++': 30, 'S+': 28, 'S': 26,
+            'A+': 24, 'A': 22, 'A-': 20,
+            'B+': 18, 'B': 16, 'B-': 14,
+            'C+': 12, 'C': 10, 'C-': 8,
+            'D+': 6, 'D': 4, 'D-': 2
+        },
+        'Precious Metals': {
+            'S++': 2, 'S+': 2, 'S': 2,
+            'A+': 1, 'A': 1, 'A-': 1,
+            'B+': 1, 'B': 1, 'B-': 1,
+            'C+': 1, 'C': 0, 'C-': 0,
+            'D+': 0, 'D': 0, 'D-': 0
+        },
+        'Equipment': {
+            'S++': 2, 'S+': 2, 'S': 2,
+            'A+': 1, 'A': 1, 'A-': 1,
+            'B+': 1, 'B': 1, 'B-': 1,
+            'C+': 1, 'C': 0, 'C-': 0,
+            'D+': 0, 'D': 0, 'D-': 0
+        }
+    };
 
-    let supabase;
-    let mediaRecorder;
-    let audioChunks = [];
-    let userId;
-    let username;
-    let channelName;
-    let presenceChannel;
-    let audioContext;
-    let analyser;
-    let isConnected = false;
-    let isRecording = false;
-    let isMuted = false;
-    let animationFrameId = null;
-    let currentSpeaker = null;
+    const sellPrices = {
+        'Construction Materials': 50,
+        'Fuel': 75,
+        'Precious Metals': 500,
+        'Equipment': 400
+    };
 
-    // Initialiser Supabase au chargement
-    function initSupabase() {
-        if (typeof window.supabase === 'undefined') {
-            setTimeout(initSupabase, 100);
+    let employees = [];
+
+    function addEmployee(type) {
+        const id = Date.now() + Math.random();
+        employees.push({id, type, grade: 'S++', resource: 'Construction Materials'});
+        renderEmployees();
+    }
+
+    function duplicateEmployee(id) {
+        const emp = employees.find(e => e.id === id);
+        if (emp) {
+            const newId = Date.now() + Math.random();
+            employees.push({
+                id: newId,
+                type: emp.type,
+                grade: emp.grade,
+                resource: emp.resource
+            });
+            renderEmployees();
+        }
+    }
+
+    function removeEmployee(id) {
+        employees = employees.filter(e => e.id !== id);
+        renderEmployees();
+    }
+
+    function updateEmployee(id, field, value) {
+        const emp = employees.find(e => e.id === id);
+        if (emp) emp[field] = value;
+        renderEmployees();
+    }
+
+    function renderEmployees() {
+        const list = document.getElementById('operations-list');
+        
+        if (employees.length === 0) {
+            list.innerHTML = '<p style="color: #666; text-align: center; padding: 20px;">No employees. Click "ADD EMPLOYEE" to begin.</p>';
             return;
         }
-        
-        try {
-            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        } catch (error) {
-            alert('Erreur de chargement: ' + error.message);
-        }
+
+        list.innerHTML = employees.map((emp, idx) => `
+            <div class="employee">
+                <div class="employee-number">#${idx + 1}</div>
+                <div class="employee-controls">
+                    <select onchange="updateEmployee(${emp.id}, 'grade', this.value)">
+                        ${['S++', 'S+', 'S', 'A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-'].map(g => 
+                            `<option value="${g}" ${emp.grade === g ? 'selected' : ''}>${g}</option>`
+                        ).join('')}
+                    </select>
+                    <select onchange="updateEmployee(${emp.id}, 'resource', this.value)">
+                        ${Object.keys(productionRates).map(r => 
+                            `<option value="${r}" ${emp.resource === r ? 'selected' : ''}>${r.replace('Construction Materials', 'C.Mat').replace('Precious Metals', 'P.Met')}</option>`
+                        ).join('')}
+                    </select>
+                </div>
+                <div class="employee-info">
+                    ${productionRates[emp.resource][emp.grade]} / 24h
+                </div>
+                <div class="employee-actions">
+                    <button class="btn btn-duplicate" onclick="duplicateEmployee(${emp.id})" title="Duplicate">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                    <button class="btn btn-remove" onclick="removeEmployee(${emp.id})" title="Remove">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `).join('');
     }
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initSupabase);
-    } else {
-        initSupabase();
-    }
-
-    // Créer les barres de visualisation
-    function createAudioBars() {
-        const visualizer = document.getElementById('audioVisualizer');
-        for (let i = 0; i < 30; i++) {
-            const bar = document.createElement('div');
-            bar.className = 'audio-bar';
-            visualizer.appendChild(bar);
-        }
-    }
-
-    createAudioBars();
-
-    async function connectToRadio() {
-        username = document.getElementById('username').value.trim();
-        channelName = document.getElementById('channel').value.trim();
-
-        if (!username || !channelName) {
-            alert('⚠️ Veuillez remplir votre pseudo et le canal');
+    function calculate() {
+        if (employees.length === 0) {
+            alert('Please add at least one employee!');
             return;
         }
 
-        const connectBtn = document.getElementById('connectBtn');
-        connectBtn.disabled = true;
-        connectBtn.textContent = 'Connexion...';
-
-        try {
-            userId = 'user_' + Math.random().toString(36).substring(7);
-
-            presenceChannel = supabase.channel(`presence:${channelName}`, {
-                config: {
-                    presence: {
-                        key: userId,
-                    },
-                    broadcast: {
-                        self: true,
-                        ack: false
-                    }
-                },
-            });
-
-            presenceChannel
-                .on('presence', { event: 'sync' }, () => {
-                    // Sync présence
-                })
-                .on('broadcast', { event: 'audio' }, (payload) => {
-                    if (!isMuted) {
-                        playAudio(payload.payload);
-                    }
-                })
-                .on('broadcast', { event: 'speaking' }, (payload) => {
-                    handleSpeakingStatus(payload.payload);
-                })
-                .subscribe(async (status) => {
-                    if (status === 'SUBSCRIBED') {
-                        await presenceChannel.track({ username, userId });
-                        isConnected = true;
-                        document.getElementById('configSection').style.display = 'none';
-                        document.getElementById('radioInterface').classList.add('active');
-                        document.getElementById('statusIndicator').textContent = `✅ Connecté sur ${channelName}`;
-                    } else if (status === 'CHANNEL_ERROR') {
-                        throw new Error('Impossible de se connecter au canal');
-                    }
-                });
-
-        } catch (error) {
-            alert('❌ Erreur: ' + error.message);
-            connectBtn.disabled = false;
-            connectBtn.textContent = 'Se connecter';
-        }
-    }
-
-    function toggleMute() {
-        isMuted = !isMuted;
-        const muteBtn = document.getElementById('muteButton');
-        if (isMuted) {
-            muteBtn.textContent = '🔇 Écoute désactivée';
-            muteBtn.classList.add('muted');
-        } else {
-            muteBtn.textContent = '🔊 Écoute activée';
-            muteBtn.classList.remove('muted');
-        }
-    }
-
-    // Configuration du bouton PTT
-    const pttButton = document.getElementById('pttButton');
-    let pttPressed = false;
-
-    pttButton.addEventListener('mousedown', (e) => {
-        e.preventDefault();
-        if (!pttPressed) {
-            pttPressed = true;
-            startTalking();
-        }
-    });
-
-    pttButton.addEventListener('mouseup', (e) => {
-        e.preventDefault();
-        if (pttPressed) {
-            pttPressed = false;
-            stopTalking();
-        }
-    });
-
-    pttButton.addEventListener('mouseleave', (e) => {
-        if (pttPressed) {
-            pttPressed = false;
-            stopTalking();
-        }
-    });
-
-    pttButton.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        if (!pttPressed) {
-            pttPressed = true;
-            startTalking();
-        }
-    });
-
-    pttButton.addEventListener('touchend', (e) => {
-        e.preventDefault();
-        if (pttPressed) {
-            pttPressed = false;
-            stopTalking();
-        }
-    });
-
-    // Support clavier (barre espace)
-    let spacePressed = false;
-    document.addEventListener('keydown', (e) => {
-        if (e.code === 'Space' && isConnected && !spacePressed && document.activeElement.tagName !== 'INPUT') {
-            e.preventDefault();
-            spacePressed = true;
-            startTalking();
-        }
-    });
-
-    document.addEventListener('keyup', (e) => {
-        if (e.code === 'Space' && spacePressed) {
-            e.preventDefault();
-            spacePressed = false;
-            stopTalking();
-        }
-    });
-
-    async function startTalking() {
-        if (!isConnected || isRecording) return;
+        const storage = parseInt(document.getElementById('storage').value) || 0;
         
-        try {
-            isRecording = true;
-            const stream = await navigator.mediaDevices.getUserMedia({ 
-                audio: {
-                    echoCancellation: true,
-                    noiseSuppression: true,
-                    autoGainControl: true
-                } 
-            });
-            
-            // Configuration du contexte audio pour la visualisation
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            analyser = audioContext.createAnalyser();
-            const source = audioContext.createMediaStreamSource(stream);
-            source.connect(analyser);
-            analyser.fftSize = 128;
-            
-            visualizeAudio();
+        const productionPerDay = {
+            'Construction Materials': 0,
+            'Fuel': 0,
+            'Precious Metals': 0,
+            'Equipment': 0
+        };
 
-            mediaRecorder = new MediaRecorder(stream, {
-                mimeType: MediaRecorder.isTypeSupported('audio/webm;codecs=opus') 
-                    ? 'audio/webm;codecs=opus' 
-                    : 'audio/webm'
-            });
-            audioChunks = [];
-
-            mediaRecorder.ondataavailable = (event) => {
-                if (event.data.size > 0) {
-                    audioChunks.push(event.data);
-                }
-            };
-
-            mediaRecorder.onstop = async () => {
-                isRecording = false;
-                
-                if (audioChunks.length === 0) {
-                    stream.getTracks().forEach(track => track.stop());
-                    return;
-                }
-                
-                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                
-                if (audioBlob.size > 500000) {
-                    stream.getTracks().forEach(track => track.stop());
-                    return;
-                }
-                
-                const reader = new FileReader();
-                reader.readAsArrayBuffer(audioBlob);
-                reader.onloadend = async () => {
-                    try {
-                        const arrayBuffer = reader.result;
-                        const uint8Array = new Uint8Array(arrayBuffer);
-                        const base64Audio = btoa(String.fromCharCode.apply(null, uint8Array));
-                        
-                        console.log('📤 Envoi audio, taille:', audioBlob.size, 'type:', audioBlob.type);
-                        
-                        const result = await presenceChannel.send({
-                            type: 'broadcast',
-                            event: 'audio',
-                            payload: { 
-                                audio: base64Audio,
-                                mimeType: audioBlob.type,
-                                from: username, 
-                                userId, 
-                                timestamp: Date.now() 
-                            }
-                        });
-                        
-                        console.log('✅ Audio envoyé, résultat:', result);
-                    } catch (error) {
-                        console.error('❌ Erreur envoi audio:', error);
-                    }
-                };
-                
-                stream.getTracks().forEach(track => track.stop());
-                
-                if (audioContext) {
-                    audioContext.close();
-                    audioContext = null;
-                }
-            };
-
-            mediaRecorder.start();
-            pttButton.classList.add('speaking');
-            pttButton.textContent = 'ÉMISSION';
-            
-            // Notifier les autres utilisateurs
-            await presenceChannel.send({
-                type: 'broadcast',
-                event: 'speaking',
-                payload: { userId, username, speaking: true }
-            });
-            
-            updateSpeakerInfo(username, true);
-
-        } catch (error) {
-            isRecording = false;
-            alert('❌ Erreur microphone: ' + error.message);
-        }
-    }
-
-    function visualizeAudio() {
-        if (!analyser || !isRecording) {
-            if (animationFrameId) {
-                cancelAnimationFrame(animationFrameId);
-                animationFrameId = null;
-            }
-            resetVisualizerBars();
-            return;
-        }
-        
-        const bufferLength = analyser.frequencyBinCount;
-        const dataArray = new Uint8Array(bufferLength);
-        const bars = document.querySelectorAll('.audio-bar');
-        
-        function draw() {
-            if (!isRecording) {
-                animationFrameId = null;
-                resetVisualizerBars();
-                return;
-            }
-            
-            analyser.getByteFrequencyData(dataArray);
-            
-            for (let i = 0; i < bars.length && i * 2 < dataArray.length; i++) {
-                const value = dataArray[i * 2] || 0;
-                const height = (value / 255) * 40 + 5;
-                bars[i].style.height = height + 'px';
-            }
-            
-            animationFrameId = requestAnimationFrame(draw);
-        }
-        
-        draw();
-    }
-
-    function resetVisualizerBars() {
-        const bars = document.querySelectorAll('.audio-bar');
-        bars.forEach(bar => {
-            bar.style.height = '10px';
+        employees.forEach(emp => {
+            const rate = productionRates[emp.resource][emp.grade];
+            productionPerDay[emp.resource] += rate;
         });
-    }
 
-    async function stopTalking() {
-        if (!isRecording) return;
+        const totalProductionPerDay = Object.values(productionPerDay).reduce((a, b) => a + b, 0);
+        const emptyingsPerDay = Math.ceil(totalProductionPerDay / storage);
         
-        if (mediaRecorder && mediaRecorder.state === 'recording') {
-            mediaRecorder.stop();
-            pttButton.classList.remove('speaking');
-            pttButton.textContent = 'PARLER';
-            
-            try {
-                await presenceChannel.send({
-                    type: 'broadcast',
-                    event: 'speaking',
-                    payload: { userId, username, speaking: false }
-                });
-            } catch (error) {
-                console.error('Erreur notification fin:', error);
-            }
-            
-            updateSpeakerInfo(null, false);
-        }
-    }
+        const effectiveProductionPerDay = {};
+        Object.keys(productionPerDay).forEach(res => {
+            effectiveProductionPerDay[res] = productionPerDay[res];
+        });
 
-    function handleSpeakingStatus(data) {
-        if (data.userId !== userId) {
-            updateSpeakerInfo(data.username, data.speaking);
-        }
-    }
-
-    function updateSpeakerInfo(name, speaking) {
-        const speakerName = document.getElementById('speakerName');
-        const speakerAvatar = document.getElementById('speakerAvatar');
-        
-        if (speaking && name) {
-            currentSpeaker = name;
-            speakerName.textContent = name;
-            speakerName.classList.add('speaking');
-            speakerAvatar.textContent = name.charAt(0).toUpperCase();
+        let warningText = '';
+        if (totalProductionPerDay > storage) {
+            warningText = `Your daily production (${totalProductionPerDay}) exceeds storage capacity (${storage}). You must empty storage ${emptyingsPerDay} times per day to avoid production losses.`;
+            document.getElementById('storage-warning').style.display = 'block';
+            document.getElementById('warning-text').textContent = warningText;
         } else {
-            currentSpeaker = null;
-            speakerName.textContent = 'Personne';
-            speakerName.classList.remove('speaking');
-            speakerAvatar.textContent = '-';
-            resetVisualizerBars();
+            document.getElementById('storage-warning').style.display = 'none';
         }
+
+        const perHour = {};
+        const perWeek = {};
+
+        Object.keys(productionPerDay).forEach(res => {
+            perHour[res] = parseFloat((effectiveProductionPerDay[res] / 24).toFixed(2));
+            perWeek[res] = effectiveProductionPerDay[res] * 7;
+        });
+
+        let revenuePerDay = 0;
+        Object.keys(productionPerDay).forEach(res => {
+            revenuePerDay += effectiveProductionPerDay[res] * sellPrices[res];
+        });
+
+        const revenuePerHour = parseFloat((revenuePerDay / 24).toFixed(2));
+        const revenuePerWeek = revenuePerDay * 7;
+        const revenuePerMonth = revenuePerDay * 30;
+        const revenuePerYear = revenuePerDay * 365;
+
+        document.getElementById('revenue-hour').textContent = revenuePerHour.toLocaleString('en-US');
+        document.getElementById('revenue-day').textContent = revenuePerDay.toLocaleString('en-US');
+        document.getElementById('revenue-week').textContent = revenuePerWeek.toLocaleString('en-US');
+        document.getElementById('revenue-month').textContent = revenuePerMonth.toLocaleString('en-US');
+        document.getElementById('revenue-year').textContent = revenuePerYear.toLocaleString('en-US');
+
+        document.getElementById('cmat-hour').textContent = perHour['Construction Materials'];
+        document.getElementById('cmat-day').textContent = effectiveProductionPerDay['Construction Materials'];
+        document.getElementById('cmat-week').textContent = perWeek['Construction Materials'];
+
+        document.getElementById('fuel-hour').textContent = perHour['Fuel'];
+        document.getElementById('fuel-day').textContent = effectiveProductionPerDay['Fuel'];
+        document.getElementById('fuel-week').textContent = perWeek['Fuel'];
+
+        document.getElementById('pm-hour').textContent = perHour['Precious Metals'];
+        document.getElementById('pm-day').textContent = effectiveProductionPerDay['Precious Metals'];
+        document.getElementById('pm-week').textContent = perWeek['Precious Metals'];
+
+        document.getElementById('equip-hour').textContent = perHour['Equipment'];
+        document.getElementById('equip-day').textContent = effectiveProductionPerDay['Equipment'];
+        document.getElementById('equip-week').textContent = perWeek['Equipment'];
+
+        document.getElementById('results').style.display = 'block';
+        document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
-    let audioQueue = [];
-    let isPlayingAudio = false;
-
-    async function playAudio(data) {
-        if (data.userId === userId) return;
-        
-        try {
-            const audio = new Audio(data.audio);
-            audio.volume = 1.0;
-            await audio.play();
-        } catch (error) {
-            console.error('Erreur lecture audio:', error);
-        }
-    }
+    addEmployee('operations');
 </script>
 ```
 
