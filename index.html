@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculateur de Compagnie BRM5</title>
+    <title id="title-text">Calculateur de Compagnie BRM5</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -58,6 +58,12 @@
         z-index: 1;
     }
 
+    .navbar-left {
+        display:flex;
+        gap:12px;
+        align-items:center;
+    }
+
     .navbar-title {
         font-size: clamp(1.3rem, 4vw, 2rem);
         font-weight: 700;
@@ -71,6 +77,24 @@
         font-size: clamp(0.8rem, 2vw, 0.95rem);
         color: #999;
         font-weight: 400;
+    }
+
+    .lang-switch {
+        display:flex;
+        gap:8px;
+        align-items:center;
+    }
+
+    /* Replace small text buttons with flag-sized buttons */
+    .lang-switch button {
+        background: transparent;
+        border: 1px solid #444;
+        color: #fff;
+        padding:6px 8px;
+        border-radius:4px;
+        cursor:pointer;
+        font-size: 1.4rem; /* larger to show flag emoji clearly */
+        line-height: 1;
     }
 
     .container {
@@ -397,6 +421,14 @@
         display: flex;
         gap: 8px;
     }
+
+    .controls-row {
+        display:flex;
+        gap:10px;
+        align-items:center;
+        justify-content:flex-end;
+        margin-bottom:10px;
+    }
 </style>
 
 
@@ -404,9 +436,16 @@
 <body>
     <nav class="navbar">
         <div class="navbar-content">
-            <div>
-                <div class="navbar-title">BRM5 COMPANY CALCULATOR</div>
-                <div class="navbar-subtitle">Headquarters Management System</div>
+            <div class="navbar-left">
+                <div>
+                    <div class="navbar-title" id="app-title">BRM5 COMPANY CALCULATOR</div>
+                    <div class="navbar-subtitle" id="app-subtitle">Headquarters Management System</div>
+                </div>
+            </div>
+            <div class="lang-switch">
+                <!-- replaced text buttons with flag buttons -->
+                <button onclick="setLang('fr')" id="btn-fr" aria-label="Français" title="Français">🇫🇷</button>
+                <button onclick="setLang('en')" id="btn-en" aria-label="English" title="English">🇬🇧</button>
             </div>
         </div>
     </nav>
@@ -415,45 +454,49 @@
 <div class="container">
     <div class="content-wrapper">
         <div class="content">
+            <div class="controls-row">
+                <button class="btn" onclick="resetData()" id="reset-btn"><i class="fas fa-eraser"></i> Reset</button>
+            </div>
+
             <div class="section">
-                <h2><i class="fas fa-users"></i> OPERATIONS PERSONNEL</h2>
+                <h2><i class="fas fa-users"></i> <span id="ops-title">OPERATIONS PERSONNEL</span></h2>
                 <div id="operations-list" class="employee-list"></div>
-                <button class="btn btn-add" onclick="addEmployee('operations')">
-                    <i class="fas fa-plus"></i> ADD EMPLOYEE
+                <button class="btn btn-add" onclick="addEmployee('operations')" id="add-employee-btn">
+                    <i class="fas fa-plus"></i> <span id="add-employee-text">ADD EMPLOYEE</span>
                 </button>
             </div>
 
             <div class="section">
-                <h2><i class="fas fa-warehouse"></i> STORAGE CAPACITY</h2>
+                <h2><i class="fas fa-warehouse"></i> <span id="storage-title">STORAGE CAPACITY</span></h2>
                 <div class="storage-input">
                     <div class="storage-row">
-                        <label>Total storage capacity:</label>
+                        <label id="storage-label">Total storage capacity:</label>
                         <input type="number" id="storage" value="100" min="0" max="300">
                     </div>
-                    <div class="storage-note">
+                    <div class="storage-note" id="storage-note">
                         <i class="fas fa-info-circle"></i> Maximum: 300 with max level building and S++ Logistics personnel
                     </div>
                 </div>
-                <div class="info-box">
+                <div class="info-box" id="important-box">
                     <i class="fas fa-exclamation-triangle"></i> <strong>IMPORTANT:</strong> Storage fills continuously. If your production exceeds storage capacity, you must empty regularly to avoid losses. Calculator accounts for required daily emptying cycles.
                 </div>
             </div>
 
-            <button class="btn calc-button" onclick="calculate()">
-                <i class="fas fa-calculator"></i> CALCULATE REVENUE
+            <button class="btn calc-button" onclick="calculate()" id="calc-btn">
+                <i class="fas fa-calculator"></i> <span id="calc-text">CALCULATE REVENUE</span>
             </button>
 
             <div id="results" class="results" style="display: none;">
-                <h2><i class="fas fa-chart-line"></i> PRODUCTION RESULTS</h2>
+                <h2><i class="fas fa-chart-line"></i> <span id="results-title">PRODUCTION RESULTS</span></h2>
                 
                 <div id="storage-warning" class="warning" style="display: none;">
-                    <i class="fas fa-exclamation-triangle"></i> <strong>WARNING:</strong> <span id="warning-text"></span>
+                    <i class="fas fa-exclamation-triangle"></i> <strong id="warning-strong">WARNING:</strong> <span id="warning-text"></span>
                 </div>
 
                 <div class="result-grid">
                     <div class="result-card">
-                        <h3><i class="fas fa-dollar-sign"></i> REVENUE (CREDITS)</h3>
-                        <div class="result-label">Per Hour</div>
+                        <h3><i class="fas fa-dollar-sign"></i> <span id="rev-title">REVENUE (CREDITS)</span></h3>
+                        <div class="result-label" id="label-hour">Per Hour</div>
                         <div class="result-value" id="revenue-hour">0</div>
                         <div class="result-label">Per Day</div>
                         <div class="result-value" id="revenue-day">0</div>
@@ -466,7 +509,7 @@
                     </div>
 
                     <div class="result-card">
-                        <h3><i class="fas fa-hammer"></i> CONSTRUCTION MATERIALS</h3>
+                        <h3><i class="fas fa-hammer"></i> <span id="cmat-title">CONSTRUCTION MATERIALS</span></h3>
                         <div class="resource-results">
                             <div class="resource-card">
                                 <div class="result-label">Per Hour</div>
@@ -484,7 +527,7 @@
                     </div>
 
                     <div class="result-card">
-                        <h3><i class="fas fa-gas-pump"></i> FUEL</h3>
+                        <h3><i class="fas fa-gas-pump"></i> <span id="fuel-title">FUEL</span></h3>
                         <div class="resource-results">
                             <div class="resource-card">
                                 <div class="result-label">Per Hour</div>
@@ -502,7 +545,7 @@
                     </div>
 
                     <div class="result-card">
-                        <h3><i class="fas fa-gem"></i> PRECIOUS METALS</h3>
+                        <h3><i class="fas fa-gem"></i> <span id="pm-title">PRECIOUS METALS</span></h3>
                         <div class="resource-results">
                             <div class="resource-card">
                                 <div class="result-label">Per Hour</div>
@@ -520,7 +563,7 @@
                     </div>
 
                     <div class="result-card">
-                        <h3><i class="fas fa-cog"></i> EQUIPMENT</h3>
+                        <h3><i class="fas fa-cog"></i> <span id="equip-title">EQUIPMENT</span></h3>
                         <div class="resource-results">
                             <div class="resource-card">
                                 <div class="result-label">Per Hour</div>
@@ -537,10 +580,17 @@
                         </div>
                     </div>
                 </div>
+
+                <div style="margin-top:20px;">
+                    <!-- chart canvas removed -->
+
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Chart.js removed -->
 
 <script>
     const productionRates = {
@@ -582,11 +632,77 @@
     };
 
     let employees = [];
+    // revenueChart and createChart removed (graph disabled)
+
+    const translations = {
+        fr: {
+            title: "Calculateur de Compagnie BRM5",
+            subtitle: "Headquarters Management System",
+            ops: "PERSONNEL D'OPÉRATIONS",
+            addEmployee: "AJOUTER UN EMPLOYÉ",
+            storageTitle: "CAPACITÉ DE STOCKAGE",
+            storageLabel: "Capacité totale de stockage :",
+            storageNote: "Maximum : 300 avec bâtiment niveau max et personnel Logistique S++",
+            important: "IMPORTANT : Le stockage se remplit en continu. Si votre production dépasse la capacité, videz régulièrement pour éviter des pertes. Le calculateur prend en compte les cycles d'ouverture quotidiens.",
+            calc: "CALCULER LES REVENUS",
+            results: "RÉSULTATS DE PRODUCTION",
+            warningStrong: "AVERTISSEMENT :",
+            reset: "Réinitialiser"
+        },
+        en: {
+            title: "BRM5 Company Calculator",
+            subtitle: "Headquarters Management System",
+            ops: "OPERATIONS PERSONNEL",
+            addEmployee: "ADD EMPLOYEE",
+            storageTitle: "STORAGE CAPACITY",
+            storageLabel: "Total storage capacity:",
+            storageNote: "Maximum: 300 with max level building and S++ Logistics personnel",
+            important: "IMPORTANT: Storage fills continuously. If your production exceeds storage capacity, empty regularly to avoid losses. Calculator accounts for required daily emptying cycles.",
+            calc: "CALCULATE REVENUE",
+            results: "PRODUCTION RESULTS",
+            warningStrong: "WARNING:",
+            reset: "Reset"
+        }
+    };
+
+    function saveToStorage() {
+        try {
+            localStorage.setItem('brm5_employees', JSON.stringify(employees));
+            localStorage.setItem('brm5_storage', document.getElementById('storage').value);
+            localStorage.setItem('brm5_lang', currentLang);
+        } catch (e) {
+            console.warn('LocalStorage save failed', e);
+        }
+    }
+
+    function loadFromStorage() {
+        try {
+            const s = localStorage.getItem('brm5_employees');
+            const st = localStorage.getItem('brm5_storage');
+            const lg = localStorage.getItem('brm5_lang');
+            if (s) employees = JSON.parse(s);
+            if (st !== null) document.getElementById('storage').value = parseInt(st, 10);
+            if (lg) setLang(lg);
+        } catch (e) {
+            console.warn('LocalStorage load failed', e);
+        }
+    }
+
+    function resetData() {
+        if (!confirm('Reset all data?')) return;
+        employees = [];
+        document.getElementById('storage').value = 100;
+        localStorage.removeItem('brm5_employees');
+        localStorage.removeItem('brm5_storage');
+        renderEmployees();
+        document.getElementById('results').style.display = 'none';
+    }
 
     function addEmployee(type) {
         const id = Date.now() + Math.random();
         employees.push({id, type, grade: 'S++', resource: 'Construction Materials'});
         renderEmployees();
+        saveToStorage();
     }
 
     function duplicateEmployee(id) {
@@ -600,18 +716,25 @@
                 resource: emp.resource
             });
             renderEmployees();
+            saveToStorage();
         }
     }
 
     function removeEmployee(id) {
         employees = employees.filter(e => e.id !== id);
         renderEmployees();
+        saveToStorage();
     }
 
     function updateEmployee(id, field, value) {
         const emp = employees.find(e => e.id === id);
         if (emp) emp[field] = value;
         renderEmployees();
+        saveToStorage();
+    }
+
+    function shortLabel(r) {
+        return r.replace('Construction Materials', 'C.Mat').replace('Precious Metals', 'P.Met');
     }
 
     function renderEmployees() {
@@ -633,7 +756,7 @@
                     </select>
                     <select onchange="updateEmployee(${emp.id}, 'resource', this.value)">
                         ${Object.keys(productionRates).map(r => 
-                            `<option value="${r}" ${emp.resource === r ? 'selected' : ''}>${r.replace('Construction Materials', 'C.Mat').replace('Precious Metals', 'P.Met')}</option>`
+                            `<option value="${r}" ${emp.resource === r ? 'selected' : ''}>${shortLabel(r)}</option>`
                         ).join('')}
                     </select>
                 </div>
@@ -652,9 +775,48 @@
         `).join('');
     }
 
+    // Language handling
+    let currentLang = 'fr';
+    function setLang(lang) {
+        if (!translations[lang]) return;
+        currentLang = lang;
+        const t = translations[lang];
+        document.getElementById('app-title').textContent = t.title;
+        document.getElementById('app-subtitle').textContent = t.subtitle;
+        document.getElementById('ops-title').textContent = t.ops;
+        document.getElementById('add-employee-text').textContent = t.addEmployee;
+        document.getElementById('storage-title').textContent = t.storageTitle;
+        document.getElementById('storage-label').textContent = t.storageLabel;
+        document.getElementById('storage-note').textContent = t.storageNote;
+        document.getElementById('important-box').innerHTML = '<i class="fas fa-exclamation-triangle"></i> <strong>IMPORTANT:</strong> ' + t.important;
+        document.getElementById('calc-text').textContent = t.calc;
+        document.getElementById('results-title').textContent = t.results;
+        document.getElementById('warning-strong').textContent = t.warningStrong;
+        document.getElementById('reset-btn').innerHTML = '<i class="fas fa-eraser"></i> ' + t.reset;
+        document.title = t.title;
+        // mark active lang button
+        document.getElementById('btn-fr').style.opacity = lang === 'fr' ? '1' : '0.6';
+        document.getElementById('btn-en').style.opacity = lang === 'en' ? '1' : '0.6';
+        saveToStorage();
+    }
+
+    function requestNotificationPermission() {
+        if (!("Notification" in window)) return;
+        if (Notification.permission === "default") {
+            Notification.requestPermission();
+        }
+    }
+
+    function showNotification(title, body) {
+        if (!("Notification" in window)) return;
+        if (Notification.permission === "granted") {
+            new Notification(title, { body });
+        }
+    }
+
     function calculate() {
         if (employees.length === 0) {
-            alert('Please add at least one employee!');
+            alert(currentLang === 'fr' ? 'Veuillez ajouter au moins un employé !' : 'Please add at least one employee!');
             return;
         }
 
@@ -673,7 +835,7 @@
         });
 
         const totalProductionPerDay = Object.values(productionPerDay).reduce((a, b) => a + b, 0);
-        const emptyingsPerDay = Math.ceil(totalProductionPerDay / storage);
+        const emptyingsPerDay = storage > 0 ? Math.ceil(totalProductionPerDay / storage) : Infinity;
         
         const effectiveProductionPerDay = {};
         Object.keys(productionPerDay).forEach(res => {
@@ -682,9 +844,13 @@
 
         let warningText = '';
         if (totalProductionPerDay > storage) {
-            warningText = `Your daily production (${totalProductionPerDay}) exceeds storage capacity (${storage}). You must empty storage ${emptyingsPerDay} times per day to avoid production losses.`;
+            warningText = currentLang === 'fr'
+                ? `Votre production journalière (${totalProductionPerDay}) dépasse la capacité (${storage}). Vous devez vider ${emptyingsPerDay} fois / jour pour éviter des pertes.`
+                : `Your daily production (${totalProductionPerDay}) exceeds storage capacity (${storage}). You must empty ${emptyingsPerDay} times/day to avoid losses.`;
             document.getElementById('storage-warning').style.display = 'block';
             document.getElementById('warning-text').textContent = warningText;
+            alert(warningText); // additional browser alert
+            showNotification(currentLang === 'fr' ? 'Avertissement stockage' : 'Storage warning', warningText);
         } else {
             document.getElementById('storage-warning').style.display = 'none';
         }
@@ -731,9 +897,21 @@
 
         document.getElementById('results').style.display = 'block';
         document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+        // Chart disabled: removed createChart call and Chart.js dependency
+
+        // Notification on success
+        showNotification(currentLang === 'fr' ? 'Calcul terminé' : 'Calculation done', (currentLang === 'fr' ? 'Revenu journalier: ' : 'Daily revenue: ') + revenuePerDay.toLocaleString());
+
+        saveToStorage();
     }
 
-    addEmployee('operations');
+    // initial setup
+    requestNotificationPermission();
+    loadFromStorage();
+    renderEmployees();
+    // If no saved employees, add one default
+    if (employees.length === 0) addEmployee('operations');
 </script>
 
 </body>
