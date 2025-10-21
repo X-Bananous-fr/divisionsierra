@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -148,16 +147,126 @@
         padding: clamp(10px, 2vw, 15px);
         border-radius: 8px;
         border: 1px solid #2a2a2a;
-        display: grid;
-        grid-template-columns: auto 1fr auto auto auto;
-        gap: clamp(8px, 2vw, 15px);
-        align-items: center;
-        transition: all 0.3s;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
     }
 
-    .employee:hover {
-        border-color: #444;
-        box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+    .employee-header {
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:8px;
+    }
+
+    .employee-number {
+        font-weight: bold;
+        color: #fff;
+        font-size: clamp(1rem, 2.5vw, 1.1rem);
+    }
+
+    .employee-controls {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .employee-info {
+        color: #999;
+        font-size: 0.9rem;
+        text-align: left;
+        white-space: normal;
+    }
+
+    .employee-actions {
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:8px;
+    }
+
+    .employee-actions .left {
+        display:flex;
+        gap:12px;
+        align-items:center;
+    }
+
+    .employee-actions .right {
+        display:flex;
+        gap:6px;
+        align-items:center;
+    }
+
+    .excluded-badge {
+        display:inline-block;
+        background: rgba(200,60,60,0.12);
+        color: #ffb3b3;
+        font-weight:700;
+        padding:2px 6px;
+        border-radius:6px;
+        font-size:0.75rem;
+    }
+
+    .employee.excluded {
+        opacity: 0.85;
+        filter: grayscale(20%);
+        border-style: dashed;
+    }
+
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .content-wrapper {
+        background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+        border-radius: 12px;
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+        overflow: hidden;
+        border: 1px solid #2a2a2a;
+    }
+
+    .content {
+        padding: clamp(15px, 3vw, 30px);
+    }
+
+    .section {
+        margin-bottom: 25px;
+        padding: clamp(15px, 3vw, 20px);
+        background: rgba(26, 26, 26, 0.6);
+        border-radius: 10px;
+        border: 1px solid #2a2a2a;
+        backdrop-filter: blur(10px);
+    }
+
+    .section h2 {
+        color: #fff;
+        margin-bottom: 20px;
+        font-size: clamp(1.2rem, 3vw, 1.8rem);
+        border-bottom: 2px solid #333;
+        padding-bottom: 10px;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .employee-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .employee {
+        background: rgba(15, 15, 15, 0.9);
+        padding: clamp(10px, 2vw, 15px);
+        border-radius: 8px;
+        border: 1px solid #2a2a2a;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
     }
 
     .employee-number {
@@ -169,15 +278,15 @@
 
     .employee-controls {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
+        grid-template-columns: 1fr;
+        gap: 8px;
     }
 
     .employee-info {
         color: #999;
         font-size: clamp(0.8rem, 2vw, 0.9rem);
-        text-align: center;
-        white-space: nowrap;
+        text-align: left;
+        white-space: normal;
     }
 
     select, input[type="number"] {
@@ -384,30 +493,79 @@
         font-size: clamp(0.85rem, 2vw, 0.95rem);
     }
 
+    /* Collection progress bar : scroll horizontal only, height increased to fit ticks+labels */
+    .collection-box {
+        margin-top: 18px;
+        padding: 12px;
+        background: rgba(25,25,25,0.6);
+        border: 1px solid #2a2a2a;
+        border-radius: 8px;
+        color: #ddd;
+    }
+    .collection-label {
+        font-weight: 600;
+        margin-bottom: 8px;
+        display:flex;
+        justify-content:space-between;
+        gap:10px;
+        align-items:center;
+    }
+    .progress-bar {
+        min-height: 80px;              /* taller so ticks + labels fit without vertical scroll */
+        height: auto;
+        background: rgba(10,10,10,0.6);
+        border-radius: 10px;
+        position: relative;
+        overflow-x: auto;              /* horizontal scroll when timeline wide */
+        overflow-y: hidden;            /* NO vertical scroll */
+        border: 1px solid #333;
+        padding: 8px 6px;              /* room for labels */
+    }
+    .progress-fill { display: none; } /* keep no yellow fill */
+
+    .timeline {
+        position: relative;
+        height: 18px;                  /* line area for ticks */
+        min-width: 600px;
+    }
+    /* visible horizontal line across timeline */
+    .timeline::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 8px;
+        height: 2px;
+        background: rgba(120,120,120,0.25);
+        border-radius: 2px;
+    }
+    .timeline .tick {
+        position: absolute;
+        top: 0px;
+        width: 2px;
+        height: 18px;
+        background: rgba(255,200,50,0.95);
+        transform: translateX(-1px);
+        border-radius:2px;
+    }
+    /* remove translateX centering to allow JS clamping; label will be positioned in px */
+    .timeline .tick-label {
+        position: absolute;
+        top: 26px;                     /* label below ticks but within .progress-bar height */
+        font-size: 0.8rem;
+        color: #ccc;
+        white-space: nowrap;
+    }
+
+    /* Excluded employee visuals */
+    .employee.excluded {
+        opacity: 0.75;
+        filter: grayscale(30%);
+        border-style: dashed;
+    }
+
     @media (max-width: 768px) {
-        .employee {
-            grid-template-columns: auto 1fr;
-            gap: 10px;
-        }
-
-        .employee-controls {
-            grid-column: 1 / -1;
-            grid-template-columns: 1fr;
-        }
-
-        .employee-info {
-            grid-column: 1 / -1;
-            text-align: left;
-        }
-
-        .btn-duplicate,
-        .btn-remove {
-            grid-column: 1 / -1;
-        }
-
-        .result-grid {
-            grid-template-columns: 1fr;
-        }
+        .employee-actions { flex-direction: column; align-items:flex-start; }
     }
 
     .calc-button {
@@ -443,9 +601,7 @@
                 </div>
             </div>
             <div class="lang-switch">
-                <!-- replaced text buttons with flag buttons -->
-                <button onclick="setLang('fr')" id="btn-fr" aria-label="Français" title="Français">🇫🇷</button>
-                <button onclick="setLang('en')" id="btn-en" aria-label="English" title="English">🇬🇧</button>
+                <!-- FR button removed (UI French-only) -->
             </div>
         </div>
     </nav>
@@ -455,56 +611,68 @@
     <div class="content-wrapper">
         <div class="content">
             <div class="controls-row">
-                <button class="btn" onclick="resetData()" id="reset-btn"><i class="fas fa-eraser"></i> Reset</button>
+                <button class="btn" onclick="resetData()" id="reset-btn"><i class="fas fa-eraser"></i> Réinitialiser</button>
             </div>
 
             <div class="section">
                 <h2><i class="fas fa-users"></i> <span id="ops-title">OPERATIONS PERSONNEL</span></h2>
                 <div id="operations-list" class="employee-list"></div>
                 <button class="btn btn-add" onclick="addEmployee('operations')" id="add-employee-btn">
-                    <i class="fas fa-plus"></i> <span id="add-employee-text">ADD EMPLOYEE</span>
+                    <i class="fas fa-plus"></i> <span id="add-employee-text">AJOUTER UN EMPLOYÉ</span>
                 </button>
             </div>
 
             <div class="section">
-                <h2><i class="fas fa-warehouse"></i> <span id="storage-title">STORAGE CAPACITY</span></h2>
+                <h2><i class="fas fa-warehouse"></i> <span id="storage-title">STOCKAGE</span></h2>
                 <div class="storage-input">
                     <div class="storage-row">
-                        <label id="storage-label">Total storage capacity:</label>
+                        <label id="storage-label">Capacité totale de stockage :</label>
                         <input type="number" id="storage" value="100" min="0" max="300">
                     </div>
                     <div class="storage-note" id="storage-note">
-                        <i class="fas fa-info-circle"></i> Maximum: 300 with max level building and S++ Logistics personnel
+                        <i class="fas fa-info-circle"></i> Maximum : 300 avec bâtiment niveau max et personnel Logistique S++
                     </div>
                 </div>
                 <div class="info-box" id="important-box">
-                    <i class="fas fa-exclamation-triangle"></i> <strong>IMPORTANT:</strong> Storage fills continuously. If your production exceeds storage capacity, you must empty regularly to avoid losses. Calculator accounts for required daily emptying cycles.
+                    <i class="fas fa-exclamation-triangle"></i> <strong>IMPORTANT :</strong> Le stockage se remplit en continu. Si votre production dépasse la capacité, videz régulièrement pour éviter des pertes. Le calculateur prend en compte les cycles d'ouverture quotidiens.
                 </div>
             </div>
 
             <button class="btn calc-button" onclick="calculate()" id="calc-btn">
-                <i class="fas fa-calculator"></i> <span id="calc-text">CALCULATE REVENUE</span>
+                <i class="fas fa-calculator"></i> <span id="calc-text">CALCULER REVENUS</span>
             </button>
 
             <div id="results" class="results" style="display: none;">
-                <h2><i class="fas fa-chart-line"></i> <span id="results-title">PRODUCTION RESULTS</span></h2>
+                <h2><i class="fas fa-chart-line"></i> <span id="results-title">RÉSULTATS DE PRODUCTION</span></h2>
                 
                 <div id="storage-warning" class="warning" style="display: none;">
-                    <i class="fas fa-exclamation-triangle"></i> <strong id="warning-strong">WARNING:</strong> <span id="warning-text"></span>
+                    <i class="fas fa-exclamation-triangle"></i> <strong id="warning-strong">AVERTISSEMENT :</strong> <span id="warning-text"></span>
+                </div>
+
+                <!-- New collection summary + progress bar -->
+                <div id="collection-section" class="collection-box" style="display:none;">
+                    <div class="collection-label">
+                        <div id="collection-text">Heure de collecte idéale : 00:00 (toutes les 24h)</div>
+                        <div id="collection-subtext" style="font-size:0.85rem;color:#bbb;"></div>
+                    </div>
+                    <div class="progress-bar" id="collection-bar" aria-hidden="true">
+                        <div class="progress-fill" id="collection-fill" style="width:0%"></div>
+                        <!-- timeline will be injected dynamically -->
+                    </div>
                 </div>
 
                 <div class="result-grid">
                     <div class="result-card">
                         <h3><i class="fas fa-dollar-sign"></i> <span id="rev-title">REVENUE (CREDITS)</span></h3>
-                        <div class="result-label" id="label-hour">Per Hour</div>
+                        <div class="result-label" id="label-hour">Par Heure</div>
                         <div class="result-value" id="revenue-hour">0</div>
-                        <div class="result-label">Per Day</div>
+                        <div class="result-label">Par Jour</div>
                         <div class="result-value" id="revenue-day">0</div>
-                        <div class="result-label">Per Week</div>
+                        <div class="result-label">Par Semaine</div>
                         <div class="result-value" id="revenue-week">0</div>
-                        <div class="result-label">Per Month</div>
+                        <div class="result-label">Par Mois</div>
                         <div class="result-value" id="revenue-month">0</div>
-                        <div class="result-label">Per Year</div>
+                        <div class="result-label">Par An</div>
                         <div class="result-value" id="revenue-year">0</div>
                     </div>
 
@@ -512,15 +680,15 @@
                         <h3><i class="fas fa-hammer"></i> <span id="cmat-title">CONSTRUCTION MATERIALS</span></h3>
                         <div class="resource-results">
                             <div class="resource-card">
-                                <div class="result-label">Per Hour</div>
+                                <div class="result-label">Par Heure</div>
                                 <div class="result-value" id="cmat-hour">0</div>
                             </div>
                             <div class="resource-card">
-                                <div class="result-label">Per Day</div>
+                                <div class="result-label">Par Jour</div>
                                 <div class="result-value" id="cmat-day">0</div>
                             </div>
                             <div class="resource-card">
-                                <div class="result-label">Per Week</div>
+                                <div class="result-label">Par Semaine</div>
                                 <div class="result-value" id="cmat-week">0</div>
                             </div>
                         </div>
@@ -530,15 +698,15 @@
                         <h3><i class="fas fa-gas-pump"></i> <span id="fuel-title">FUEL</span></h3>
                         <div class="resource-results">
                             <div class="resource-card">
-                                <div class="result-label">Per Hour</div>
+                                <div class="result-label">Par Heure</div>
                                 <div class="result-value" id="fuel-hour">0</div>
                             </div>
                             <div class="resource-card">
-                                <div class="result-label">Per Day</div>
+                                <div class="result-label">Par Jour</div>
                                 <div class="result-value" id="fuel-day">0</div>
                             </div>
                             <div class="resource-card">
-                                <div class="result-label">Per Week</div>
+                                <div class="result-label">Par Semaine</div>
                                 <div class="result-value" id="fuel-week">0</div>
                             </div>
                         </div>
@@ -548,15 +716,15 @@
                         <h3><i class="fas fa-gem"></i> <span id="pm-title">PRECIOUS METALS</span></h3>
                         <div class="resource-results">
                             <div class="resource-card">
-                                <div class="result-label">Per Hour</div>
+                                <div class="result-label">Par Heure</div>
                                 <div class="result-value" id="pm-hour">0</div>
                             </div>
                             <div class="resource-card">
-                                <div class="result-label">Per Day</div>
+                                <div class="result-label">Par Jour</div>
                                 <div class="result-value" id="pm-day">0</div>
                             </div>
                             <div class="resource-card">
-                                <div class="result-label">Per Week</div>
+                                <div class="result-label">Par Semaine</div>
                                 <div class="result-value" id="pm-week">0</div>
                             </div>
                         </div>
@@ -566,15 +734,15 @@
                         <h3><i class="fas fa-cog"></i> <span id="equip-title">EQUIPMENT</span></h3>
                         <div class="resource-results">
                             <div class="resource-card">
-                                <div class="result-label">Per Hour</div>
+                                <div class="result-label">Par Heure</div>
                                 <div class="result-value" id="equip-hour">0</div>
                             </div>
                             <div class="resource-card">
-                                <div class="result-label">Per Day</div>
+                                <div class="result-label">Par Jour</div>
                                 <div class="result-value" id="equip-day">0</div>
                             </div>
                             <div class="resource-card">
-                                <div class="result-label">Per Week</div>
+                                <div class="result-label">Par Semaine</div>
                                 <div class="result-value" id="equip-week">0</div>
                             </div>
                         </div>
@@ -632,38 +800,7 @@
     };
 
     let employees = [];
-    // revenueChart and createChart removed (graph disabled)
-
-    const translations = {
-        fr: {
-            title: "Calculateur de Compagnie BRM5",
-            subtitle: "Headquarters Management System",
-            ops: "PERSONNEL D'OPÉRATIONS",
-            addEmployee: "AJOUTER UN EMPLOYÉ",
-            storageTitle: "CAPACITÉ DE STOCKAGE",
-            storageLabel: "Capacité totale de stockage :",
-            storageNote: "Maximum : 300 avec bâtiment niveau max et personnel Logistique S++",
-            important: "IMPORTANT : Le stockage se remplit en continu. Si votre production dépasse la capacité, videz régulièrement pour éviter des pertes. Le calculateur prend en compte les cycles d'ouverture quotidiens.",
-            calc: "CALCULER LES REVENUS",
-            results: "RÉSULTATS DE PRODUCTION",
-            warningStrong: "AVERTISSEMENT :",
-            reset: "Réinitialiser"
-        },
-        en: {
-            title: "BRM5 Company Calculator",
-            subtitle: "Headquarters Management System",
-            ops: "OPERATIONS PERSONNEL",
-            addEmployee: "ADD EMPLOYEE",
-            storageTitle: "STORAGE CAPACITY",
-            storageLabel: "Total storage capacity:",
-            storageNote: "Maximum: 300 with max level building and S++ Logistics personnel",
-            important: "IMPORTANT: Storage fills continuously. If your production exceeds storage capacity, empty regularly to avoid losses. Calculator accounts for required daily emptying cycles.",
-            calc: "CALCULATE REVENUE",
-            results: "PRODUCTION RESULTS",
-            warningStrong: "WARNING:",
-            reset: "Reset"
-        }
-    };
+    let currentLang = 'fr';
 
     function saveToStorage() {
         try {
@@ -679,17 +816,19 @@
         try {
             const s = localStorage.getItem('brm5_employees');
             const st = localStorage.getItem('brm5_storage');
-            const lg = localStorage.getItem('brm5_lang');
-            if (s) employees = JSON.parse(s);
+            if (s) {
+                employees = JSON.parse(s);
+                // Ensure older entries get the two new flags
+                employees = employees.map(e => ({ excludedProd: false, excludedRev: false, ...e }));
+            }
             if (st !== null) document.getElementById('storage').value = parseInt(st, 10);
-            if (lg) setLang(lg);
         } catch (e) {
             console.warn('LocalStorage load failed', e);
         }
     }
 
     function resetData() {
-        if (!confirm('Reset all data?')) return;
+        if (!confirm('Réinitialiser toutes les données ?')) return;
         employees = [];
         document.getElementById('storage').value = 100;
         localStorage.removeItem('brm5_employees');
@@ -700,7 +839,7 @@
 
     function addEmployee(type) {
         const id = Date.now() + Math.random();
-        employees.push({id, type, grade: 'S++', resource: 'Construction Materials'});
+        employees.push({id, type, grade: 'S++', resource: 'Construction Materials', excludedProd: false, excludedRev: false});
         renderEmployees();
         saveToStorage();
     }
@@ -713,7 +852,9 @@
                 id: newId,
                 type: emp.type,
                 grade: emp.grade,
-                resource: emp.resource
+                resource: emp.resource,
+                excludedProd: !!emp.excludedProd,
+                excludedRev: !!emp.excludedRev
             });
             renderEmployees();
             saveToStorage();
@@ -739,65 +880,55 @@
 
     function renderEmployees() {
         const list = document.getElementById('operations-list');
-        
         if (employees.length === 0) {
-            list.innerHTML = '<p style="color: #666; text-align: center; padding: 20px;">No employees. Click "ADD EMPLOYEE" to begin.</p>';
+            list.innerHTML = '<p style="color: #666; text-align: center; padding: 20px;">Aucun employé. Cliquez sur \"AJOUTER UN EMPLOYÉ\" pour commencer.</p>';
             return;
         }
 
         list.innerHTML = employees.map((emp, idx) => `
-            <div class="employee">
-                <div class="employee-number">#${idx + 1}</div>
+            <div class="employee ${(emp.excludedProd || emp.excludedRev) ? 'excluded' : ''}">
+                <div class="employee-header">
+                    <div class="employee-number">#${idx + 1}</div>
+                    <div>
+                        ${emp.excludedProd ? '<span class="excluded-badge">EXCL PROD</span>' : ''}
+                        ${emp.excludedRev ? '<span class="excluded-badge">EXCL REV</span>' : ''}
+                    </div>
+                </div>
+
                 <div class="employee-controls">
                     <select onchange="updateEmployee(${emp.id}, 'grade', this.value)">
-                        ${['S++', 'S+', 'S', 'A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-'].map(g => 
+                        ${['S++','S+','S','A+','A','A-','B+','B','B-','C+','C','C-','D+','D','D-'].map(g =>
                             `<option value="${g}" ${emp.grade === g ? 'selected' : ''}>${g}</option>`
                         ).join('')}
                     </select>
+
                     <select onchange="updateEmployee(${emp.id}, 'resource', this.value)">
-                        ${Object.keys(productionRates).map(r => 
+                        ${Object.keys(productionRates).map(r =>
                             `<option value="${r}" ${emp.resource === r ? 'selected' : ''}>${shortLabel(r)}</option>`
                         ).join('')}
                     </select>
+
+                    <div class="employee-info">
+                        ${productionRates[emp.resource][emp.grade]} / 24h ${emp.excludedProd ? '<strong>(exclu prod)</strong>' : ''} ${emp.excludedRev ? '<strong>(exclu rev)</strong>' : ''}
+                    </div>
                 </div>
-                <div class="employee-info">
-                    ${productionRates[emp.resource][emp.grade]} / 24h
-                </div>
+
                 <div class="employee-actions">
-                    <button class="btn btn-duplicate" onclick="duplicateEmployee(${emp.id})" title="Duplicate">
-                        <i class="fas fa-copy"></i>
-                    </button>
-                    <button class="btn btn-remove" onclick="removeEmployee(${emp.id})" title="Remove">
-                        <i class="fas fa-trash"></i>
-                    </button>
+                    <div class="left">
+                        <label style="font-size:0.9rem;">
+                            <input type="checkbox" onchange="updateEmployee(${emp.id}, 'excludedProd', this.checked)" ${emp.excludedProd ? 'checked' : ''}> Excl. prod
+                        </label>
+                        <label style="font-size:0.9rem;">
+                            <input type="checkbox" onchange="updateEmployee(${emp.id}, 'excludedRev', this.checked)" ${emp.excludedRev ? 'checked' : ''}> Excl. rev
+                        </label>
+                    </div>
+                    <div class="right">
+                        <button class="btn btn-duplicate" onclick="duplicateEmployee(${emp.id})" title="Dupliquer"><i class="fas fa-copy"></i></button>
+                        <button class="btn btn-remove" onclick="removeEmployee(${emp.id})" title="Supprimer"><i class="fas fa-trash"></i></button>
+                    </div>
                 </div>
             </div>
         `).join('');
-    }
-
-    // Language handling
-    let currentLang = 'fr';
-    function setLang(lang) {
-        if (!translations[lang]) return;
-        currentLang = lang;
-        const t = translations[lang];
-        document.getElementById('app-title').textContent = t.title;
-        document.getElementById('app-subtitle').textContent = t.subtitle;
-        document.getElementById('ops-title').textContent = t.ops;
-        document.getElementById('add-employee-text').textContent = t.addEmployee;
-        document.getElementById('storage-title').textContent = t.storageTitle;
-        document.getElementById('storage-label').textContent = t.storageLabel;
-        document.getElementById('storage-note').textContent = t.storageNote;
-        document.getElementById('important-box').innerHTML = '<i class="fas fa-exclamation-triangle"></i> <strong>IMPORTANT:</strong> ' + t.important;
-        document.getElementById('calc-text').textContent = t.calc;
-        document.getElementById('results-title').textContent = t.results;
-        document.getElementById('warning-strong').textContent = t.warningStrong;
-        document.getElementById('reset-btn').innerHTML = '<i class="fas fa-eraser"></i> ' + t.reset;
-        document.title = t.title;
-        // mark active lang button
-        document.getElementById('btn-fr').style.opacity = lang === 'fr' ? '1' : '0.6';
-        document.getElementById('btn-en').style.opacity = lang === 'en' ? '1' : '0.6';
-        saveToStorage();
     }
 
     function requestNotificationPermission() {
@@ -814,58 +945,61 @@
         }
     }
 
+    function formatHourMinuteFromFraction(hoursFloat) {
+        const totalMinutes = Math.round(hoursFloat * 60);
+        const hh = Math.floor(totalMinutes / 60) % 24;
+        const mm = totalMinutes % 60;
+        return `${hh.toString().padStart(2,'0')}h${mm.toString().padStart(2,'0')}`;
+    }
+
     function calculate() {
         if (employees.length === 0) {
-            alert(currentLang === 'fr' ? 'Veuillez ajouter au moins un employé !' : 'Please add at least one employee!');
+            alert('Veuillez ajouter au moins un employé !');
             return;
         }
 
         const storage = parseInt(document.getElementById('storage').value) || 0;
-        
-        const productionPerDay = {
-            'Construction Materials': 0,
-            'Fuel': 0,
-            'Precious Metals': 0,
-            'Equipment': 0
+
+        // production counted only from employees NOT excludedProd
+        const productionPerDayProd = {
+            'Construction Materials': 0, 'Fuel': 0, 'Precious Metals': 0, 'Equipment': 0
+        };
+        // production used to compute revenue (employees NOT excludedRev)
+        const productionPerDayRev = {
+            'Construction Materials': 0, 'Fuel': 0, 'Precious Metals': 0, 'Equipment': 0
         };
 
         employees.forEach(emp => {
-            const rate = productionRates[emp.resource][emp.grade];
-            productionPerDay[emp.resource] += rate;
+            const rate = productionRates[emp.resource][emp.grade] || 0;
+            if (!emp.excludedProd) productionPerDayProd[emp.resource] += rate;
+            if (!emp.excludedRev) productionPerDayRev[emp.resource] += rate;
         });
 
-        const totalProductionPerDay = Object.values(productionPerDay).reduce((a, b) => a + b, 0);
+        const totalProductionPerDay = Object.values(productionPerDayProd).reduce((a,b)=>a+b,0);
         const emptyingsPerDay = storage > 0 ? Math.ceil(totalProductionPerDay / storage) : Infinity;
-        
-        const effectiveProductionPerDay = {};
-        Object.keys(productionPerDay).forEach(res => {
-            effectiveProductionPerDay[res] = productionPerDay[res];
-        });
 
-        let warningText = '';
+        // storage warning based on productionPerDayProd
         if (totalProductionPerDay > storage) {
-            warningText = currentLang === 'fr'
-                ? `Votre production journalière (${totalProductionPerDay}) dépasse la capacité (${storage}). Vous devez vider ${emptyingsPerDay} fois / jour pour éviter des pertes.`
-                : `Your daily production (${totalProductionPerDay}) exceeds storage capacity (${storage}). You must empty ${emptyingsPerDay} times/day to avoid losses.`;
+            const warningText = `Votre production journalière (${totalProductionPerDay}) dépasse la capacité (${storage}). Vous devez vider ${emptyingsPerDay} fois / jour pour éviter des pertes.`;
             document.getElementById('storage-warning').style.display = 'block';
             document.getElementById('warning-text').textContent = warningText;
-            alert(warningText); // additional browser alert
-            showNotification(currentLang === 'fr' ? 'Avertissement stockage' : 'Storage warning', warningText);
+            showNotification('Avertissement stockage', warningText);
         } else {
             document.getElementById('storage-warning').style.display = 'none';
         }
 
+        // compute perHour/week based on productionPerDayProd (production effect)
         const perHour = {};
         const perWeek = {};
-
-        Object.keys(productionPerDay).forEach(res => {
-            perHour[res] = parseFloat((effectiveProductionPerDay[res] / 24).toFixed(2));
-            perWeek[res] = effectiveProductionPerDay[res] * 7;
+        Object.keys(productionPerDayProd).forEach(res => {
+            perHour[res] = parseFloat((productionPerDayProd[res] / 24).toFixed(2));
+            perWeek[res] = productionPerDayProd[res] * 7;
         });
 
+        // revenue computed from productionPerDayRev (employees included for revenue)
         let revenuePerDay = 0;
-        Object.keys(productionPerDay).forEach(res => {
-            revenuePerDay += effectiveProductionPerDay[res] * sellPrices[res];
+        Object.keys(productionPerDayRev).forEach(res => {
+            revenuePerDay += productionPerDayRev[res] * sellPrices[res];
         });
 
         const revenuePerHour = parseFloat((revenuePerDay / 24).toFixed(2));
@@ -873,36 +1007,84 @@
         const revenuePerMonth = revenuePerDay * 30;
         const revenuePerYear = revenuePerDay * 365;
 
-        document.getElementById('revenue-hour').textContent = revenuePerHour.toLocaleString('en-US');
-        document.getElementById('revenue-day').textContent = revenuePerDay.toLocaleString('en-US');
-        document.getElementById('revenue-week').textContent = revenuePerWeek.toLocaleString('en-US');
-        document.getElementById('revenue-month').textContent = revenuePerMonth.toLocaleString('en-US');
-        document.getElementById('revenue-year').textContent = revenuePerYear.toLocaleString('en-US');
+        document.getElementById('revenue-hour').textContent = revenuePerHour.toLocaleString('fr-FR');
+        document.getElementById('revenue-day').textContent = revenuePerDay.toLocaleString('fr-FR');
+        document.getElementById('revenue-week').textContent = revenuePerWeek.toLocaleString('fr-FR');
+        document.getElementById('revenue-month').textContent = revenuePerMonth.toLocaleString('fr-FR');
+        document.getElementById('revenue-year').textContent = revenuePerYear.toLocaleString('fr-FR');
 
         document.getElementById('cmat-hour').textContent = perHour['Construction Materials'];
-        document.getElementById('cmat-day').textContent = effectiveProductionPerDay['Construction Materials'];
+        document.getElementById('cmat-day').textContent = productionPerDayProd['Construction Materials'];
         document.getElementById('cmat-week').textContent = perWeek['Construction Materials'];
 
         document.getElementById('fuel-hour').textContent = perHour['Fuel'];
-        document.getElementById('fuel-day').textContent = effectiveProductionPerDay['Fuel'];
+        document.getElementById('fuel-day').textContent = productionPerDayProd['Fuel'];
         document.getElementById('fuel-week').textContent = perWeek['Fuel'];
 
         document.getElementById('pm-hour').textContent = perHour['Precious Metals'];
-        document.getElementById('pm-day').textContent = effectiveProductionPerDay['Precious Metals'];
+        document.getElementById('pm-day').textContent = productionPerDayProd['Precious Metals'];
         document.getElementById('pm-week').textContent = perWeek['Precious Metals'];
 
         document.getElementById('equip-hour').textContent = perHour['Equipment'];
-        document.getElementById('equip-day').textContent = effectiveProductionPerDay['Equipment'];
+        document.getElementById('equip-day').textContent = productionPerDayProd['Equipment'];
         document.getElementById('equip-week').textContent = perWeek['Equipment'];
+
+        // TIMELINE (scrollable horizontally; pixel-based timeline ensures all labels visible vertically)
+        const collectionSection = document.getElementById('collection-section');
+        const colText = document.getElementById('collection-text');
+        const colSub = document.getElementById('collection-subtext');
+        const colBar = document.getElementById('collection-bar');
+
+        // remove previous timeline
+        const prevTimeline = colBar.querySelector('.timeline');
+        if (prevTimeline) prevTimeline.remove();
+
+        if (!isFinite(emptyingsPerDay) || totalProductionPerDay === 0 || storage === 0) {
+            colText.textContent = 'Aucune collecte nécessaire sur 24h';
+            colSub.textContent = '';
+            collectionSection.style.display = 'block';
+        } else {
+            const timeline = document.createElement('div');
+            timeline.className = 'timeline';
+            const timelineWidth = Math.max(600, emptyingsPerDay * 120);
+            timeline.style.width = timelineWidth + 'px';
+            colBar.appendChild(timeline);
+
+            function placeTick(hourPos, labelText) {
+                const leftPx = (hourPos / 24) * timelineWidth;
+                const tick = document.createElement('div'); tick.className = 'tick'; tick.style.left = `${leftPx}px`; timeline.appendChild(tick);
+                const lbl = document.createElement('div'); lbl.className = 'tick-label'; lbl.textContent = labelText; timeline.appendChild(lbl);
+                // after appended, clamp label inside timeline so it's always visible
+                const lblW = lbl.offsetWidth || 40;
+                const minX = 6;
+                const maxX = timelineWidth - lblW - 6;
+                const clamped = Math.max(minX, Math.min(leftPx - (lblW/2), maxX));
+                lbl.style.left = `${clamped}px`;
+            }
+
+            if (emptyingsPerDay <= 1) {
+                const hoursToFill = Math.min(24, (24 * storage) / Math.max(totalProductionPerDay,1));
+                const nextTime = formatHourMinuteFromFraction(hoursToFill);
+                colText.textContent = `Heure de collecte idéale : ~${nextTime} (point de départ 00:00)`;
+                colSub.textContent = `Intervalle: ${Math.round(hoursToFill*60)/60} h (1 fois / jour)`;
+                placeTick(hoursToFill % 24, nextTime);
+                collectionSection.style.display = 'block';
+            } else {
+                const intervalHours = 24 / emptyingsPerDay;
+                colText.textContent = `Collectes recommandées toutes les ~${Math.round(intervalHours*100)/100}h`;
+                colSub.textContent = `${emptyingsPerDay} vidages nécessaires / jour`;
+                for (let k = 1; k <= emptyingsPerDay; k++) {
+                    const hourPos = (intervalHours * k) % 24;
+                    placeTick(hourPos, formatHourMinuteFromFraction(hourPos));
+                }
+                collectionSection.style.display = 'block';
+            }
+        }
 
         document.getElementById('results').style.display = 'block';
         document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
-        // Chart disabled: removed createChart call and Chart.js dependency
-
-        // Notification on success
-        showNotification(currentLang === 'fr' ? 'Calcul terminé' : 'Calculation done', (currentLang === 'fr' ? 'Revenu journalier: ' : 'Daily revenue: ') + revenuePerDay.toLocaleString());
-
+        showNotification('Calcul terminé', 'Revenu journalier: ' + revenuePerDay.toLocaleString());
         saveToStorage();
     }
 
