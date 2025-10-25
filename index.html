@@ -3,517 +3,1098 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Division Sierra</title>
+    <title id="title-text">Division Sierra - Vos revenues BRM5</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Rajdhani', sans-serif;
-            background: #0a0a0a;
-            color: #e0e0e0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            text-align: center;
-            padding: 20px;
-        }
 
-        .hero h1 {
-            font-size: clamp(3rem, 15vw, 8rem);
-            font-weight: 700;
-            margin-bottom: 10px;
-            opacity: 0;
-            transform: translateY(50px);
-            animation: fadeInUp 1s ease forwards;
-        }
+    body {
+        font-family: 'Rajdhani', sans-serif;
+        background: #0a0a0a;
+        color: #e0e0e0;
+        min-height: 100vh;
+    }
 
-        .hero h2 {
-            font-size: clamp(1.5rem, 5vw, 2.5rem);
-            margin-bottom: 20px;
-            color: #5865F2;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 1s ease 0.3s forwards;
-        }
+    .navbar {
+        background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+        border-bottom: 2px solid #333;
+        padding: 15px 20px;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        overflow: hidden;
+    }
 
-        .hero-line {
-            width: 100%;
-            max-width: 500px;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, #fff, transparent);
-            margin: 30px 0;
-            opacity: 0;
-            transform: scaleX(0);
-            animation: lineExpand 1s ease 0.5s forwards;
-        }
+    .navbar::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+        animation: shine 3s infinite;
+    }
 
-        .navigation-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            max-width: 1200px;
-            width: 90%;
-            margin: 40px auto;
-            opacity: 0;
-            animation: fadeIn 1s ease 1s forwards;
-        }
+    @keyframes shine {
+        to { left: 100%; }
+    }
 
-        .nav-card {
-            background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
-            border: 2px solid #2a2a2a;
-            border-radius: 16px;
-            padding: 30px;
-            text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
+    .navbar-content {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        z-index: 1;
+    }
 
-        .nav-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: 0.5s;
-        }
+    .navbar-left {
+        display:flex;
+        gap:12px;
+        align-items:center;
+    }
 
-        .nav-card:hover::before {
-            left: 100%;
-        }
+    .navbar-title {
+        font-size: clamp(1.3rem, 4vw, 2rem);
+        font-weight: 700;
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    }
 
-        .nav-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            border-color: #5865F2;
-        }
+    .navbar-subtitle {
+        font-size: clamp(0.8rem, 2vw, 0.95rem);
+        color: #999;
+        font-weight: 400;
+    }
 
-        .nav-icon {
-            font-size: 3rem;
-            color: #5865F2;
-            margin-bottom: 20px;
-        }
+    .lang-switch {
+        display:flex;
+        gap:8px;
+        align-items:center;
+    }
 
-        .nav-title {
-            font-size: 1.5rem;
-            color: #fff;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
+    /* Replace small text buttons with flag-sized buttons */
+    .lang-switch button {
+        background: transparent;
+        border: 1px solid #444;
+        color: #fff;
+        padding:6px 8px;
+        border-radius:4px;
+        cursor:pointer;
+        font-size: 1.4rem; /* larger to show flag emoji clearly */
+        line-height: 1;
+    }
 
-        .nav-desc {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            color: #999;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+    }
 
-        .nav-link {
-            display: inline-block;
-            padding: 12px 25px;
-            background: linear-gradient(90deg, #5865F2, #7289da);
-            color: #fff;
-            text-decoration: none;
-            border-radius: 25px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
+    .content-wrapper {
+        background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+        border-radius: 12px;
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+        overflow: hidden;
+        border: 1px solid #2a2a2a;
+    }
 
-        .nav-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(88,101,242,0.4);
-        }
+    .content {
+        padding: clamp(15px, 3vw, 30px);
+    }
 
-        .equipment-bubble {
-            display: flex;
-            flex-direction: column;
-            background: rgba(88,101,242,0.1);
-            border: 1px solid rgba(88,101,242,0.3);
-            border-radius: 16px;
-            padding: 15px;
-            margin: 10px 0;
-            transition: all 0.3s ease;
-            text-align: left;
-            width: 100%;
-        }
+    .section {
+        margin-bottom: 25px;
+        padding: clamp(15px, 3vw, 20px);
+        background: rgba(26, 26, 26, 0.6);
+        border-radius: 10px;
+        border: 1px solid #2a2a2a;
+        backdrop-filter: blur(10px);
+    }
 
-        .equipment-bubble:hover {
-            background: rgba(88,101,242,0.2);
-            transform: translateX(5px);
-        }
+    .section h2 {
+        color: #fff;
+        margin-bottom: 20px;
+        font-size: clamp(1.2rem, 3vw, 1.8rem);
+        border-bottom: 2px solid #333;
+        padding-bottom: 10px;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
 
-        .bubble-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
+    .employee-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
 
-        .bubble-header i {
-            font-size: 1.2rem;
-            color: #5865F2;
-            margin-right: 10px;
-            width: 24px;
-            text-align: center;
-        }
+    .employee {
+        background: rgba(15, 15, 15, 0.9);
+        padding: clamp(10px, 2vw, 15px);
+        border-radius: 8px;
+        border: 1px solid #2a2a2a;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
 
-        .bubble-title {
-            font-weight: 600;
-            color: #fff;
-        }
+    .employee-header {
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:8px;
+    }
 
-        .bubble-desc {
-            color: #999;
-            font-size: 0.9rem;
-            margin-left: 34px;
-            margin-bottom: 8px;
-        }
+    .employee-number {
+        font-weight: bold;
+        color: #fff;
+        font-size: clamp(1rem, 2.5vw, 1.1rem);
+    }
 
-        .bubble-price {
-            color: #5865F2;
-            font-weight: 600;
-            margin-left: 34px;
-            padding-top: 8px;
-            border-top: 1px solid rgba(88,101,242,0.2);
-        }
+    .employee-controls {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
 
-        .category-separator {
-            width: 100%;
-            text-align: center;
-            margin: 30px 0;
-            grid-column: 1 / -1;
-        }
+    .employee-info {
+        color: #999;
+        font-size: 0.9rem;
+        text-align: left;
+        white-space: normal;
+    }
 
-        .category-separator h3 {
-            color: #5865F2;
-            font-size: 1.8rem;
-            position: relative;
-        }
+    .employee-actions {
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:8px;
+    }
 
-        .category-separator h3::before,
-        .category-separator h3::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            width: 50px;
-            height: 1px;
-            background: #5865F2;
-        }
+    .employee-actions .left {
+        display:flex;
+        gap:12px;
+        align-items:center;
+    }
 
-        .category-separator h3::before {
-            right: 100%;
-            margin-right: 15px;
-        }
+    .employee-actions .right {
+        display:flex;
+        gap:6px;
+        align-items:center;
+    }
 
-        .category-separator h3::after {
-            left: 100%;
-            margin-left: 15px;
-        }
+    .excluded-badge {
+        display:inline-block;
+        background: rgba(200,60,60,0.12);
+        color: #ffb3b3;
+        font-weight:700;
+        padding:2px 6px;
+        border-radius:6px;
+        font-size:0.75rem;
+    }
 
-        .fade-in-element {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
+    .employee.excluded {
+        opacity: 0.85;
+        filter: grayscale(20%);
+        border-style: dashed;
+    }
 
-        .fade-in-element.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+    }
 
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    .content-wrapper {
+        background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+        border-radius: 12px;
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+        overflow: hidden;
+        border: 1px solid #2a2a2a;
+    }
 
-        @keyframes lineExpand {
-            to {
-                opacity: 1;
-                transform: scaleX(1);
-            }
-        }
+    .content {
+        padding: clamp(15px, 3vw, 30px);
+    }
 
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
-        }
-    </style>
+    .section {
+        margin-bottom: 25px;
+        padding: clamp(15px, 3vw, 20px);
+        background: rgba(26, 26, 26, 0.6);
+        border-radius: 10px;
+        border: 1px solid #2a2a2a;
+        backdrop-filter: blur(10px);
+    }
+
+    .section h2 {
+        color: #fff;
+        margin-bottom: 20px;
+        font-size: clamp(1.2rem, 3vw, 1.8rem);
+        border-bottom: 2px solid #333;
+        padding-bottom: 10px;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .employee-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .employee {
+        background: rgba(15, 15, 15, 0.9);
+        padding: clamp(10px, 2vw, 15px);
+        border-radius: 8px;
+        border: 1px solid #2a2a2a;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .employee-number {
+        font-weight: bold;
+        color: #fff;
+        font-size: clamp(1rem, 2.5vw, 1.2rem);
+        min-width: 30px;
+    }
+
+    .employee-controls {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .employee-info {
+        color: #999;
+        font-size: clamp(0.8rem, 2vw, 0.9rem);
+        text-align: left;
+        white-space: normal;
+    }
+
+    select, input[type="number"] {
+        padding: clamp(8px, 2vw, 10px);
+        background: rgba(10, 10, 10, 0.9);
+        color: #fff;
+        border: 2px solid #2a2a2a;
+        border-radius: 5px;
+        font-size: clamp(0.85rem, 2vw, 1rem);
+        font-family: 'Rajdhani', sans-serif;
+        transition: all 0.3s;
+        width: 100%;
+    }
+
+    select:hover, input:hover {
+        border-color: #444;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+    }
+
+    select:focus, input:focus {
+        outline: none;
+        border-color: #555;
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    }
+
+    select option {
+        background: #0a0a0a;
+        color: #fff;
+    }
+
+    .btn {
+        padding: clamp(10px, 2vw, 12px) clamp(15px, 3vw, 25px);
+        background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+        color: #fff;
+        border: 1px solid #3a3a3a;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: clamp(0.85rem, 2vw, 1rem);
+        font-family: 'Rajdhani', sans-serif;
+        transition: all 0.3s;
+        font-weight: 600;
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+    }
+
+    .btn:hover {
+        background: linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .btn:active {
+        transform: translateY(0);
+    }
+
+    .btn-duplicate {
+        background: linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%);
+        border-color: #4a4a4a;
+        padding: clamp(6px, 1.5vw, 8px) clamp(10px, 2vw, 15px);
+        font-size: clamp(0.8rem, 2vw, 0.9rem);
+    }
+
+    .btn-duplicate:hover {
+        background: linear-gradient(135deg, #4a4a4a 0%, #3a3a3a 100%);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-remove {
+        background: linear-gradient(135deg, #3a1a1a 0%, #2a0a0a 100%);
+        border-color: #4a2a2a;
+        padding: clamp(6px, 1.5vw, 8px) clamp(10px, 2vw, 15px);
+        font-size: clamp(0.8rem, 2vw, 0.9rem);
+    }
+
+    .btn-remove:hover {
+        background: linear-gradient(135deg, #5a2a2a 0%, #3a1a1a 100%);
+        box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
+    }
+
+    .btn-add {
+        margin-top: 15px;
+        width: 100%;
+    }
+
+    .storage-input {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .storage-row {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .storage-input label {
+        font-weight: 600;
+        color: #ccc;
+    }
+
+    .storage-input input {
+        max-width: 150px;
+    }
+
+    .storage-note {
+        color: #888;
+        font-size: clamp(0.75rem, 2vw, 0.85rem);
+    }
+
+    .results {
+        background: linear-gradient(135deg, rgba(30, 30, 30, 0.8) 0%, rgba(20, 20, 20, 0.8) 100%);
+        border: 2px solid #2a2a2a;
+        padding: clamp(15px, 3vw, 25px);
+        border-radius: 10px;
+        margin-top: 30px;
+        backdrop-filter: blur(10px);
+    }
+
+    .results h2 {
+        color: #fff;
+        border-bottom: 2px solid #333;
+        margin-bottom: 20px;
+    }
+
+    .result-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: clamp(12px, 2vw, 20px);
+        margin-top: 20px;
+    }
+
+    .result-card {
+        background: rgba(15, 15, 15, 0.8);
+        padding: clamp(12px, 2.5vw, 20px);
+        border-radius: 8px;
+        border: 1px solid #2a2a2a;
+        transition: all 0.3s;
+    }
+
+    .result-card:hover {
+        border-color: #444;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+        transform: translateY(-3px);
+    }
+
+    .result-card h3 {
+        font-size: clamp(1rem, 2.5vw, 1.3rem);
+        margin-bottom: 15px;
+        border-bottom: 2px solid #2a2a2a;
+        padding-bottom: 8px;
+        color: #fff;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .result-value {
+        font-size: clamp(1.5rem, 4vw, 2rem);
+        font-weight: bold;
+        margin: 8px 0;
+        color: #fff;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+
+    .result-label {
+        font-size: clamp(0.8rem, 2vw, 0.9rem);
+        color: #999;
+    }
+
+    .resource-results {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 12px;
+        margin-top: 15px;
+    }
+
+    .resource-card {
+        background: rgba(10, 10, 10, 0.6);
+        padding: 12px;
+        border-radius: 8px;
+        text-align: center;
+        border: 1px solid #2a2a2a;
+    }
+
+    .warning {
+        background: rgba(60, 40, 20, 0.3);
+        border: 1px solid #5a4a2a;
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 15px;
+        color: #d4a574;
+        font-size: clamp(0.85rem, 2vw, 0.95rem);
+    }
+
+    .info-box {
+        background: rgba(30, 30, 30, 0.3);
+        border: 1px solid #3a3a3a;
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 15px;
+        color: #aaa;
+        font-size: clamp(0.85rem, 2vw, 0.95rem);
+    }
+
+    /* Collection progress bar : scroll horizontal only, height increased to fit ticks+labels */
+    .collection-box {
+        margin-top: 18px;
+        padding: 12px;
+        background: rgba(25,25,25,0.6);
+        border: 1px solid #2a2a2a;
+        border-radius: 8px;
+        color: #ddd;
+    }
+    .collection-label {
+        font-weight: 600;
+        margin-bottom: 8px;
+        display:flex;
+        justify-content:space-between;
+        gap:10px;
+        align-items:center;
+    }
+    .progress-bar {
+        min-height: 80px;              /* taller so ticks + labels fit without vertical scroll */
+        height: auto;
+        background: rgba(10,10,10,0.6);
+        border-radius: 10px;
+        position: relative;
+        overflow-x: auto;              /* horizontal scroll when timeline wide */
+        overflow-y: hidden;            /* NO vertical scroll */
+        border: 1px solid #333;
+        padding: 8px 6px;              /* room for labels */
+    }
+    .progress-fill { display: none; } /* keep no yellow fill */
+
+    .timeline {
+        position: relative;
+        height: 18px;                  /* line area for ticks */
+        min-width: 600px;
+    }
+    /* visible horizontal line across timeline */
+    .timeline::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 8px;
+        height: 2px;
+        background: rgba(120,120,120,0.25);
+        border-radius: 2px;
+    }
+    .timeline .tick {
+        position: absolute;
+        top: 0px;
+        width: 2px;
+        height: 18px;
+        background: rgba(255,200,50,0.95);
+        transform: translateX(-1px);
+        border-radius:2px;
+    }
+    /* remove translateX centering to allow JS clamping; label will be positioned in px */
+    .timeline .tick-label {
+        position: absolute;
+        top: 26px;                     /* label below ticks but within .progress-bar height */
+        font-size: 0.8rem;
+        color: #ccc;
+        white-space: nowrap;
+    }
+
+    /* Excluded employee visuals */
+    .employee.excluded {
+        opacity: 0.75;
+        filter: grayscale(30%);
+        border-style: dashed;
+    }
+
+    @media (max-width: 768px) {
+        .employee-actions { flex-direction: column; align-items:flex-start; }
+    }
+
+    .calc-button {
+        width: 100%;
+        margin-top: 20px;
+        padding: clamp(12px, 3vw, 15px);
+        font-size: clamp(1rem, 2.5vw, 1.2rem);
+    }
+
+    .employee-actions {
+        display: flex;
+        gap: 8px;
+    }
+
+    .controls-row {
+        display:flex;
+        gap:10px;
+        align-items:center;
+        justify-content:flex-end;
+        margin-bottom:10px;
+    }
+</style>
+
+
 </head>
 <body>
-    <div class="hero">
-        <h1>DIVISION SIERRA</h1>
-        <h2>Équipements et Package</h2>
-        <div class="hero-line"></div>
-        
-        <div class="navigation-grid">
-            <div class="category-separator">
-                <h3>Package de Base</h3>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="navbar-left">
+                <div>
+                    <div class="navbar-title" id="app-title">DIVISION SIERRA</div>
+                    <div class="navbar-subtitle" id="app-subtitle">Vos revenues BRM5</div>
+                </div>
+            </div>
+            <div class="lang-switch">
+                <!-- FR button removed (UI French-only) -->
+            </div>
+        </div>
+    </nav>
+
+
+<div class="container">
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="controls-row">
+                <button class="btn" onclick="resetData()" id="reset-btn"><i class="fas fa-eraser"></i> Réinitialiser</button>
             </div>
 
-            <div class="nav-card">
-                <i class="fas fa-shield-alt nav-icon"></i>
-                <div class="nav-title">Équipement Principal</div>
-                <div class="nav-desc">
-                    <div class="equipment-bubble">
-                        <div class="bubble-header">
-                            <i class="fas fa-tshirt"></i>
-                            <span class="bubble-title">Treillis F3</span>
-                        </div>
-                        <div class="bubble-desc">Uniforme militaire complet aux couleurs réglementaires</div>
-                        <div class="bubble-price">1200$</div>
+            <div class="section">
+                <h2><i class="fas fa-users"></i> <span id="ops-title">OPERATIONS PERSONNEL</span></h2>
+                <div id="operations-list" class="employee-list"></div>
+                <button class="btn btn-add" onclick="addEmployee('operations')" id="add-employee-btn">
+                    <i class="fas fa-plus"></i> <span id="add-employee-text">AJOUTER UN EMPLOYÉ</span>
+                </button>
+            </div>
+
+            <div class="section">
+                <h2><i class="fas fa-warehouse"></i> <span id="storage-title">STOCKAGE</span></h2>
+                <div class="storage-input">
+                    <div class="storage-row">
+                        <label id="storage-label">Capacité totale de stockage :</label>
+                        <input type="number" id="storage" value="100" min="0" max="300">
                     </div>
-                    <div class="equipment-bubble">
-                        <div class="bubble-header">
-                            <i class="fas fa-mask"></i>
-                            <span class="bubble-title">Cagoule</span>
-                        </div>
-                        <div class="bubble-desc">Protection faciale réglementaire</div>
-                        <div class="bubble-price">50-200$</div>
+                    <div class="storage-note" id="storage-note">
+                        <i class="fas fa-info-circle"></i> Maximum : 300 avec bâtiment niveau max et personnel Logistique S++
                     </div>
-                    <div class="equipment-bubble">
-                        <div class="bubble-header">
-                            <i class="fas fa-gun"></i>
-                            <span class="bubble-title">Glock 17 GEN3</span>
-                        </div>
-                        <div class="bubble-desc">Arme de poing standard</div>
-                    </div>
-                    <div class="equipment-bubble">
-                        <div class="bubble-header">
-                            <i class="fas fa-toolbox"></i>
-                            <span class="bubble-title">Ceinturon</span>
-                        </div>
-                        <div class="bubble-desc">Support pour équipement tactique</div>
-                        <div class="bubble-price">100-500$</div>
-                    </div>
+                </div>
+                <div class="info-box" id="important-box">
+                    <i class="fas fa-exclamation-triangle"></i> <strong>IMPORTANT :</strong> Le stockage se remplit en continu. Si votre production dépasse la capacité, videz régulièrement pour éviter des pertes. Le calculateur prend en compte les cycles d'ouverture quotidiens.
                 </div>
             </div>
 
-            <div class="nav-card">
-                <i class="fas fa-user-shield nav-icon"></i>
-                <div class="nav-title">Protection</div>
-                <div class="nav-desc">
-                    <div class="equipment-bubble">
-                        <div class="bubble-header">
-                            <i class="fas fa-hard-hat"></i>
-                            <span class="bubble-title">Casque kaki</span>
-                        </div>
-                        <div class="bubble-desc">Protection balistique de la tête</div>
-                        <div class="bubble-price">0-1000$</div>
+            <button class="btn calc-button" onclick="calculate()" id="calc-btn">
+                <i class="fas fa-calculator"></i> <span id="calc-text">CALCULER REVENUS</span>
+            </button>
+
+            <div id="results" class="results" style="display: none;">
+                <h2><i class="fas fa-chart-line"></i> <span id="results-title">RÉSULTATS DE PRODUCTION</span></h2>
+                
+                <div id="storage-warning" class="warning" style="display: none;">
+                    <i class="fas fa-exclamation-triangle"></i> <strong id="warning-strong">AVERTISSEMENT :</strong> <span id="warning-text"></span>
+                </div>
+
+                <!-- New collection summary + progress bar -->
+                <div id="collection-section" class="collection-box" style="display:none;">
+                    <div class="collection-label">
+                        <div id="collection-text">Heure de collecte idéale : 00:00 (toutes les 24h)</div>
+                        <div id="collection-subtext" style="font-size:0.85rem;color:#bbb;"></div>
                     </div>
-                    <div class="equipment-bubble">
-                        <div class="bubble-header">
-                            <i class="fas fa-mitten"></i>
-                            <span class="bubble-title">Gants kaki</span>
-                        </div>
-                        <div class="bubble-desc">Protection des mains et meilleure prise</div>
-                        <div class="bubble-price">100-1000$</div>
-                    </div>
-                    <div class="equipment-bubble">
-                        <div class="bubble-header">
-                            <i class="fas fa-vest"></i>
-                            <span class="bubble-title">Gilet par balle kaki</span>
-                        </div>
-                        <div class="bubble-desc">Protection balistique du torse</div>
-                        <div class="bubble-price">400-3000$</div>
-                    </div>
-                    <div class="equipment-bubble">
-                        <div class="bubble-header">
-                            <i class="fas fa-khanda"></i>
-                            <span class="bubble-title">Couteau</span>
-                        </div>
-                        <div class="bubble-desc">Outil tactique multifonction</div>
-                        <div class="bubble-price">0-2000$</div>
+                    <div class="progress-bar" id="collection-bar" aria-hidden="true">
+                        <div class="progress-fill" id="collection-fill" style="width:0%"></div>
+                        <!-- timeline will be injected dynamically -->
                     </div>
                 </div>
-            </div>
 
-            <div class="nav-card">
-                <i class="fas fa-box-open nav-icon"></i>
-                <div class="nav-title">Équipement Tactique</div>
-                <div class="nav-desc">
-                    <div class="equipment-bubble">
-                        <div class="bubble-header">
-                            <i class="fas fa-compass"></i>
-                            <span class="bubble-title">Boussole</span>
-                        </div>
-                        <div class="bubble-desc">Navigation tactique sur le terrain</div>
+                <div class="result-grid">
+                    <div class="result-card">
+                        <h3><i class="fas fa-dollar-sign"></i> <span id="rev-title">REVENUE (CREDITS)</span></h3>
+                        <div class="result-label" id="label-hour">Par Heure</div>
+                        <div class="result-value" id="revenue-hour">0</div>
+                        <div class="result-label">Par Jour</div>
+                        <div class="result-value" id="revenue-day">0</div>
+                        <div class="result-label">Par Semaine</div>
+                        <div class="result-value" id="revenue-week">0</div>
+                        <div class="result-label">Par Mois</div>
+                        <div class="result-value" id="revenue-month">0</div>
+                        <div class="result-label">Par An</div>
+                        <div class="result-value" id="revenue-year">0</div>
                     </div>
-                    <div class="equipment-bubble">
-                        <div class="bubble-header">
-                            <i class="fas fa-binoculars"></i>
-                            <span class="bubble-title">Jumelles</span>
+
+                    <div class="result-card">
+                        <h3><i class="fas fa-hammer"></i> <span id="cmat-title">CONSTRUCTION MATERIALS</span></h3>
+                        <div class="resource-results">
+                            <div class="resource-card">
+                                <div class="result-label">Par Heure</div>
+                                <div class="result-value" id="cmat-hour">0</div>
+                            </div>
+                            <div class="resource-card">
+                                <div class="result-label">Par Jour</div>
+                                <div class="result-value" id="cmat-day">0</div>
+                            </div>
+                            <div class="resource-card">
+                                <div class="result-label">Par Semaine</div>
+                                <div class="result-value" id="cmat-week">0</div>
+                            </div>
                         </div>
-                        <div class="bubble-desc">Observation et reconnaissance</div>
                     </div>
-                    <div class="equipment-bubble">
-                        <div class="bubble-header">
-                            <i class="fas fa-briefcase-medical"></i>
-                            <span class="bubble-title">Matériel Médical</span>
+
+                    <div class="result-card">
+                        <h3><i class="fas fa-gas-pump"></i> <span id="fuel-title">FUEL</span></h3>
+                        <div class="resource-results">
+                            <div class="resource-card">
+                                <div class="result-label">Par Heure</div>
+                                <div class="result-value" id="fuel-hour">0</div>
+                            </div>
+                            <div class="resource-card">
+                                <div class="result-label">Par Jour</div>
+                                <div class="result-value" id="fuel-day">0</div>
+                            </div>
+                            <div class="resource-card">
+                                <div class="result-label">Par Semaine</div>
+                                <div class="result-value" id="fuel-week">0</div>
+                            </div>
                         </div>
-                        <div class="bubble-desc">5x Dressing et 5x Bandage pour premiers soins</div>
                     </div>
-                    <div class="equipment-bubble">
-                        <div class="bubble-header">
-                            <i class="fas fa-boxes-stacked"></i>
-                            <span class="bubble-title">Chargeurs</span>
+
+                    <div class="result-card">
+                        <h3><i class="fas fa-gem"></i> <span id="pm-title">PRECIOUS METALS</span></h3>
+                        <div class="resource-results">
+                            <div class="resource-card">
+                                <div class="result-label">Par Heure</div>
+                                <div class="result-value" id="pm-hour">0</div>
+                            </div>
+                            <div class="resource-card">
+                                <div class="result-label">Par Jour</div>
+                                <div class="result-value" id="pm-day">0</div>
+                            </div>
+                            <div class="resource-card">
+                                <div class="result-label">Par Semaine</div>
+                                <div class="result-value" id="pm-week">0</div>
+                            </div>
                         </div>
-                        <div class="bubble-desc">10x Chargeurs M4A1 et 5-10x Chargeurs Glock</div>
+                    </div>
+
+                    <div class="result-card">
+                        <h3><i class="fas fa-cog"></i> <span id="equip-title">EQUIPMENT</span></h3>
+                        <div class="resource-results">
+                            <div class="resource-card">
+                                <div class="result-label">Par Heure</div>
+                                <div class="result-value" id="equip-hour">0</div>
+                            </div>
+                            <div class="resource-card">
+                                <div class="result-label">Par Jour</div>
+                                <div class="result-value" id="equip-day">0</div>
+                            </div>
+                            <div class="resource-card">
+                                <div class="result-label">Par Semaine</div>
+                                <div class="result-value" id="equip-week">0</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="category-separator">
-                <h3>Spécialités Militaires</h3>
-            </div>
+                <div style="margin-top:20px;">
+                    <!-- chart canvas removed -->
 
-            <div class="nav-card">
-                <i class="fas fa-user-md nav-icon"></i>
-                <div class="nav-title">Médecin</div>
-                <div class="nav-desc">
-                    <div class="equipment-bubble">
-                        <div class="bubble-header">
-                            <i class="fas fa-kit-medical"></i>
-                            <span class="bubble-title">Sac à Dos Large</span>
-                        </div>
-                        <div class="bubble-desc">Capacité pour 25x Dressing et 25x Bandage. Équipement essentiel pour les soins sur le terrain.</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="nav-card">
-                <i class="fas fa-helicopter nav-icon"></i>
-                <div class="nav-title">Pilote</div>
-                <div class="nav-desc">
-                    <div class="equipment-bubble">
-                        <div class="bubble-header">
-                            <i class="fas fa-helicopter"></i>
-                            <span class="bubble-title">Hélicoptère</span>
-                        </div>
-                        <div class="bubble-desc">LittleBird ou BlackHawk au choix. Licence de pilote nécessaire.</div>
-                    </div>
-                    <div class="equipment-bubble">
-                        <div class="bubble-header">
-                            <i class="fas fa-gun"></i>
-                            <span class="bubble-title">Armement Spécifique</span>
-                        </div>
-                        <div class="bubble-desc">Fusil à pompe ou pistolet mitrailleur (ou M4A1 si dans le coffre de l'hélicoptère)</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="nav-card">
-                <i class="fas fa-wrench nav-icon"></i>
-                <div class="nav-title">Ingénieur</div>
-                <div class="nav-desc">
-                    <div class="equipment-bubble">
-                        <div class="bubble-header">
-                            <i class="fas fa-truck-monster"></i>
-                            <span class="bubble-title">Véhicule</span>
-                        </div>
-                        <div class="bubble-desc">Hummee ou VBMR au choix. Permis de conduire nécessaire.</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="nav-card">
-                <i class="fas fa-crosshairs nav-icon"></i>
-                <div class="nav-title">Tireur d'Elite</div>
-                <div class="nav-desc">
-                    <div class="equipment-bubble">
-                        <div class="bubble-header">
-                            <i class="fas fa-crosshairs"></i>
-                            <span class="bubble-title">Sniper</span>
-                        </div>
-                        <div class="bubble-desc">Arme de précision au choix</div>
-                        <div class="bubble-price">3000-20000$</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="nav-card">
-                <i class="fas fa-bullseye nav-icon"></i>
-                <div class="nav-title">Mitrailleur</div>
-                <div class="nav-desc">
-                    <div class="equipment-bubble">
-                        <div class="bubble-header">
-                            <i class="fas fa-gun"></i>
-                            <span class="bubble-title">PKM ou M249</span>
-                        </div>
-                        <div class="bubble-desc">Mitrailleuse lourde au choix</div>
-                        <div class="bubble-price">≈13000$</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="nav-card">
-                <i class="fas fa-eye nav-icon"></i>
-                <div class="nav-title">Éclaireur</div>
-                <div class="nav-desc">
-                    <div class="equipment-bubble">
-                        <div class="bubble-header">
-                            <i class="fas fa-bag-shopping"></i>
-                            <span class="bubble-title">Équipement de Base + Sac à Dos Léger</span>
-                        </div>
-                        <div class="bubble-desc">Configuration légère pour mobilité maximale</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="category-separator">
-                <h3>Règles des Spécialités</h3>
-            </div>
-
-            <div class="nav-card" style="grid-column: 1 / -1;">
-                <i class="fas fa-scroll nav-icon"></i>
-                <div class="nav-title">Conditions</div>
-                <div class="nav-desc">
-                    <div class="equipment-bubble">
-                        <div class="bubble-header">
-                            <i class="fas fa-graduation-cap"></i>
-                            <span class="bubble-title">Formation Obligatoire</span>
-                        </div>
-                        <div class="bubble-desc">Formation spécifique nécessaire pour obtenir la licence de spécialité. Maximum 2 spécialités par personne.</div>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <script>
-        // Observer pour l'animation au scroll
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
+<!-- Chart.js removed -->
+
+<script>
+    const productionRates = {
+        'Construction Materials': {
+            'S++': 30, 'S+': 28, 'S': 26,
+            'A+': 24, 'A': 22, 'A-': 20,
+            'B+': 18, 'B': 16, 'B-': 14,
+            'C+': 12, 'C': 10, 'C-': 8,
+            'D+': 6, 'D': 4, 'D-': 2
+        },
+        'Fuel': {
+            'S++': 30, 'S+': 28, 'S': 26,
+            'A+': 24, 'A': 22, 'A-': 20,
+            'B+': 18, 'B': 16, 'B-': 14,
+            'C+': 12, 'C': 10, 'C-': 8,
+            'D+': 6, 'D': 4, 'D-': 2
+        },
+        'Precious Metals': {
+            'S++': 2, 'S+': 2, 'S': 2,
+            'A+': 1, 'A': 1, 'A-': 1,
+            'B+': 1, 'B': 1, 'B-': 1,
+            'C+': 1, 'C': 0, 'C-': 0,
+            'D+': 0, 'D': 0, 'D-': 0
+        },
+        'Equipment': {
+            'S++': 2, 'S+': 2, 'S': 2,
+            'A+': 1, 'A': 1, 'A-': 1,
+            'B+': 1, 'B': 1, 'B-': 1,
+            'C+': 1, 'C': 0, 'C-': 0,
+            'D+': 0, 'D': 0, 'D-': 0
+        }
+    };
+
+    const sellPrices = {
+        'Construction Materials': 50,
+        'Fuel': 75,
+        'Precious Metals': 500,
+        'Equipment': 400
+    };
+
+    let employees = [];
+    let currentLang = 'fr';
+
+    function saveToStorage() {
+        try {
+            localStorage.setItem('brm5_employees', JSON.stringify(employees));
+            localStorage.setItem('brm5_storage', document.getElementById('storage').value);
+            localStorage.setItem('brm5_lang', currentLang);
+        } catch (e) {
+            console.warn('LocalStorage save failed', e);
+        }
+    }
+
+    function loadFromStorage() {
+        try {
+            const s = localStorage.getItem('brm5_employees');
+            const st = localStorage.getItem('brm5_storage');
+            if (s) {
+                employees = JSON.parse(s);
+                // Ensure older entries get the two new flags
+                employees = employees.map(e => ({ excludedProd: false, excludedRev: false, ...e }));
+            }
+            if (st !== null) document.getElementById('storage').value = parseInt(st, 10);
+        } catch (e) {
+            console.warn('LocalStorage load failed', e);
+        }
+    }
+
+    function resetData() {
+        if (!confirm('Réinitialiser toutes les données ?')) return;
+        employees = [];
+        document.getElementById('storage').value = 100;
+        localStorage.removeItem('brm5_employees');
+        localStorage.removeItem('brm5_storage');
+        renderEmployees();
+        document.getElementById('results').style.display = 'none';
+    }
+
+    function addEmployee(type) {
+        const id = Date.now() + Math.random();
+        employees.push({id, type, grade: 'S++', resource: 'Construction Materials', excludedProd: false, excludedRev: false});
+        renderEmployees();
+        saveToStorage();
+    }
+
+    function duplicateEmployee(id) {
+        const emp = employees.find(e => e.id === id);
+        if (emp) {
+            const newId = Date.now() + Math.random();
+            employees.push({
+                id: newId,
+                type: emp.type,
+                grade: emp.grade,
+                resource: emp.resource,
+                excludedProd: !!emp.excludedProd,
+                excludedRev: !!emp.excludedRev
             });
-        }, {
-            threshold: 0.1
+            renderEmployees();
+            saveToStorage();
+        }
+    }
+
+    function removeEmployee(id) {
+        employees = employees.filter(e => e.id !== id);
+        renderEmployees();
+        saveToStorage();
+    }
+
+    function updateEmployee(id, field, value) {
+        const emp = employees.find(e => e.id === id);
+        if (emp) emp[field] = value;
+        renderEmployees();
+        saveToStorage();
+    }
+
+    function shortLabel(r) {
+        return r.replace('Construction Materials', 'C.Mat').replace('Precious Metals', 'P.Met');
+    }
+
+    function renderEmployees() {
+        const list = document.getElementById('operations-list');
+        if (employees.length === 0) {
+            list.innerHTML = '<p style="color: #666; text-align: center; padding: 20px;">Aucun employé. Cliquez sur \"AJOUTER UN EMPLOYÉ\" pour commencer.</p>';
+            return;
+        }
+
+        list.innerHTML = employees.map((emp, idx) => `
+            <div class="employee ${(emp.excludedProd || emp.excludedRev) ? 'excluded' : ''}">
+                <div class="employee-header">
+                    <div class="employee-number">#${idx + 1}</div>
+                    <div>
+                        ${emp.excludedProd ? '<span class="excluded-badge">EXCL PROD</span>' : ''}
+                        ${emp.excludedRev ? '<span class="excluded-badge">EXCL REV</span>' : ''}
+                    </div>
+                </div>
+
+                <div class="employee-controls">
+                    <select onchange="updateEmployee(${emp.id}, 'grade', this.value)">
+                        ${['S++','S+','S','A+','A','A-','B+','B','B-','C+','C','C-','D+','D','D-'].map(g =>
+                            `<option value="${g}" ${emp.grade === g ? 'selected' : ''}>${g}</option>`
+                        ).join('')}
+                    </select>
+
+                    <select onchange="updateEmployee(${emp.id}, 'resource', this.value)">
+                        ${Object.keys(productionRates).map(r =>
+                            `<option value="${r}" ${emp.resource === r ? 'selected' : ''}>${shortLabel(r)}</option>`
+                        ).join('')}
+                    </select>
+
+                    <div class="employee-info">
+                        ${productionRates[emp.resource][emp.grade]} / 24h ${emp.excludedProd ? '<strong>(exclu prod)</strong>' : ''} ${emp.excludedRev ? '<strong>(exclu rev)</strong>' : ''}
+                    </div>
+                </div>
+
+                <div class="employee-actions">
+                    <div class="left">
+                        <label style="font-size:0.9rem;">
+                            <input type="checkbox" onchange="updateEmployee(${emp.id}, 'excludedProd', this.checked)" ${emp.excludedProd ? 'checked' : ''}> Excl. prod
+                        </label>
+                        <label style="font-size:0.9rem;">
+                            <input type="checkbox" onchange="updateEmployee(${emp.id}, 'excludedRev', this.checked)" ${emp.excludedRev ? 'checked' : ''}> Excl. rev
+                        </label>
+                    </div>
+                    <div class="right">
+                        <button class="btn btn-duplicate" onclick="duplicateEmployee(${emp.id})" title="Dupliquer"><i class="fas fa-copy"></i></button>
+                        <button class="btn btn-remove" onclick="removeEmployee(${emp.id})" title="Supprimer"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function requestNotificationPermission() {
+        if (!("Notification" in window)) return;
+        if (Notification.permission === "default") {
+            Notification.requestPermission();
+        }
+    }
+
+    function showNotification(title, body) {
+        if (!("Notification" in window)) return;
+        if (Notification.permission === "granted") {
+            new Notification(title, { body });
+        }
+    }
+
+    function formatHourMinuteFromFraction(hoursFloat) {
+        const totalMinutes = Math.round(hoursFloat * 60);
+        const hh = Math.floor(totalMinutes / 60) % 24;
+        const mm = totalMinutes % 60;
+        return `${hh.toString().padStart(2,'0')}h${mm.toString().padStart(2,'0')}`;
+    }
+
+    function calculate() {
+        if (employees.length === 0) {
+            alert('Veuillez ajouter au moins un employé !');
+            return;
+        }
+
+        const storage = parseInt(document.getElementById('storage').value) || 0;
+
+        // production counted only from employees NOT excludedProd
+        const productionPerDayProd = {
+            'Construction Materials': 0, 'Fuel': 0, 'Precious Metals': 0, 'Equipment': 0
+        };
+        // production used to compute revenue (employees NOT excludedRev)
+        const productionPerDayRev = {
+            'Construction Materials': 0, 'Fuel': 0, 'Precious Metals': 0, 'Equipment': 0
+        };
+
+        employees.forEach(emp => {
+            const rate = productionRates[emp.resource][emp.grade] || 0;
+            if (!emp.excludedProd) productionPerDayProd[emp.resource] += rate;
+            if (!emp.excludedRev) productionPerDayRev[emp.resource] += rate;
         });
 
-        // Ajouter la classe et l'observer sur toutes les bulles d'équipement
-        document.querySelectorAll('.equipment-bubble').forEach(bubble => {
-            bubble.classList.add('fade-in-element');
-            observer.observe(bubble);
+        const totalProductionPerDay = Object.values(productionPerDayProd).reduce((a,b)=>a+b,0);
+        const emptyingsPerDay = storage > 0 ? Math.ceil(totalProductionPerDay / storage) : Infinity;
+
+        // storage warning based on productionPerDayProd
+        if (totalProductionPerDay > storage) {
+            const warningText = `Votre production journalière (${totalProductionPerDay}) dépasse la capacité (${storage}). Vous devez vider ${emptyingsPerDay} fois / jour pour éviter des pertes.`;
+            document.getElementById('storage-warning').style.display = 'block';
+            document.getElementById('warning-text').textContent = warningText;
+            showNotification('Avertissement stockage', warningText);
+        } else {
+            document.getElementById('storage-warning').style.display = 'none';
+        }
+
+        // compute perHour/week based on productionPerDayProd (production effect)
+        const perHour = {};
+        const perWeek = {};
+        Object.keys(productionPerDayProd).forEach(res => {
+            perHour[res] = parseFloat((productionPerDayProd[res] / 24).toFixed(2));
+            perWeek[res] = productionPerDayProd[res] * 7;
         });
-    </script>
+
+        // revenue computed from productionPerDayRev (employees included for revenue)
+        let revenuePerDay = 0;
+        Object.keys(productionPerDayRev).forEach(res => {
+            revenuePerDay += productionPerDayRev[res] * sellPrices[res];
+        });
+
+        const revenuePerHour = parseFloat((revenuePerDay / 24).toFixed(2));
+        const revenuePerWeek = revenuePerDay * 7;
+        const revenuePerMonth = revenuePerDay * 30;
+        const revenuePerYear = revenuePerDay * 365;
+
+        document.getElementById('revenue-hour').textContent = revenuePerHour.toLocaleString('fr-FR');
+        document.getElementById('revenue-day').textContent = revenuePerDay.toLocaleString('fr-FR');
+        document.getElementById('revenue-week').textContent = revenuePerWeek.toLocaleString('fr-FR');
+        document.getElementById('revenue-month').textContent = revenuePerMonth.toLocaleString('fr-FR');
+        document.getElementById('revenue-year').textContent = revenuePerYear.toLocaleString('fr-FR');
+
+        document.getElementById('cmat-hour').textContent = perHour['Construction Materials'];
+        document.getElementById('cmat-day').textContent = productionPerDayProd['Construction Materials'];
+        document.getElementById('cmat-week').textContent = perWeek['Construction Materials'];
+
+        document.getElementById('fuel-hour').textContent = perHour['Fuel'];
+        document.getElementById('fuel-day').textContent = productionPerDayProd['Fuel'];
+        document.getElementById('fuel-week').textContent = perWeek['Fuel'];
+
+        document.getElementById('pm-hour').textContent = perHour['Precious Metals'];
+        document.getElementById('pm-day').textContent = productionPerDayProd['Precious Metals'];
+        document.getElementById('pm-week').textContent = perWeek['Precious Metals'];
+
+        document.getElementById('equip-hour').textContent = perHour['Equipment'];
+        document.getElementById('equip-day').textContent = productionPerDayProd['Equipment'];
+        document.getElementById('equip-week').textContent = perWeek['Equipment'];
+
+        // TIMELINE (scrollable horizontally; pixel-based timeline ensures all labels visible vertically)
+        const collectionSection = document.getElementById('collection-section');
+        const colText = document.getElementById('collection-text');
+        const colSub = document.getElementById('collection-subtext');
+        const colBar = document.getElementById('collection-bar');
+
+        // remove previous timeline
+        const prevTimeline = colBar.querySelector('.timeline');
+        if (prevTimeline) prevTimeline.remove();
+
+        if (!isFinite(emptyingsPerDay) || totalProductionPerDay === 0 || storage === 0) {
+            colText.textContent = 'Aucune collecte nécessaire sur 24h';
+            colSub.textContent = '';
+            collectionSection.style.display = 'block';
+        } else {
+            const timeline = document.createElement('div');
+            timeline.className = 'timeline';
+            const timelineWidth = Math.max(600, emptyingsPerDay * 120);
+            timeline.style.width = timelineWidth + 'px';
+            colBar.appendChild(timeline);
+
+            function placeTick(hourPos, labelText) {
+                const leftPx = (hourPos / 24) * timelineWidth;
+                const tick = document.createElement('div'); tick.className = 'tick'; tick.style.left = `${leftPx}px`; timeline.appendChild(tick);
+                const lbl = document.createElement('div'); lbl.className = 'tick-label'; lbl.textContent = labelText; timeline.appendChild(lbl);
+                // after appended, clamp label inside timeline so it's always visible
+                const lblW = lbl.offsetWidth || 40;
+                const minX = 6;
+                const maxX = timelineWidth - lblW - 6;
+                const clamped = Math.max(minX, Math.min(leftPx - (lblW/2), maxX));
+                lbl.style.left = `${clamped}px`;
+            }
+
+            if (emptyingsPerDay <= 1) {
+                const hoursToFill = Math.min(24, (24 * storage) / Math.max(totalProductionPerDay,1));
+                const nextTime = formatHourMinuteFromFraction(hoursToFill);
+                colText.textContent = `Heure de collecte idéale : ~${nextTime} (point de départ 00:00)`;
+                colSub.textContent = `Intervalle: ${Math.round(hoursToFill*60)/60} h (1 fois / jour)`;
+                placeTick(hoursToFill % 24, nextTime);
+                collectionSection.style.display = 'block';
+            } else {
+                const intervalHours = 24 / emptyingsPerDay;
+                colText.textContent = `Collectes recommandées toutes les ~${Math.round(intervalHours*100)/100}h`;
+                colSub.textContent = `${emptyingsPerDay} vidages nécessaires / jour`;
+                for (let k = 1; k <= emptyingsPerDay; k++) {
+                    const hourPos = (intervalHours * k) % 24;
+                    placeTick(hourPos, formatHourMinuteFromFraction(hourPos));
+                }
+                collectionSection.style.display = 'block';
+            }
+        }
+
+        document.getElementById('results').style.display = 'block';
+        document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+        showNotification('Calcul terminé', 'Revenu journalier: ' + revenuePerDay.toLocaleString());
+        saveToStorage();
+    }
+
+    // initial setup
+    requestNotificationPermission();
+    loadFromStorage();
+    renderEmployees();
+    // If no saved employees, add one default
+    if (employees.length === 0) addEmployee('operations');
+</script>
+
 </body>
 </html>
