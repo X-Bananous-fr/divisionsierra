@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Division Sierra - Formation de Base</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Rajdhani', sans-serif;
+        background: #0a0e1a;
+        color: #e0e0e0;
+        line-height: 1.6;
+    }
+
+    .header-strip {
+        background: linear-gradient(to right, #000091 0%, #000091 33%, #FFFFFF 33%, #FFFFFF 66%, #E1000F 66%, #E1000F 100%);
+        height: 4px;
+    }
+
+    .game-banner {
+        background: linear-gradient(135deg, #ff6b00, #ff8c00);
+        color: white;
+        text-align: center;
+        padding: 10px;
+        font-weight: 600;
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+
+    header {
+        background: rgba(15, 20, 35, 0.98);
+        padding: 18px 0;
+        border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+    }
+
+    .header-content {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 40px;
+    }
+
+    .site-title h1 {
+        font-size: 26px;
+        font-weight: 700;
+        color: #00d4ff;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        text-align: left;
+    }
+
+    .hero {
+        background: linear-gradient(135deg, #0f1423 0%, #1a1f35 100%);
+        padding: 60px 40px;
+        text-align: center;
+        border-bottom: 2px solid #00d4ff;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 200%;
+        height: 100%;
+        background-image: 
+            radial-gradient(circle, rgba(0,212,255,0.15) 1px, transparent 1px),
+            radial-gradient(circle, rgba(0,212,255,0.1) 1px, transparent 1px);
+        background-size: 50px 50px, 30px 30px;
+        background-position: 0 0, 25px 25px;
+        animation: tvStatic 8s linear infinite;
+        pointer-events: none;
+        opacity: 0.3;
+    }
+
+    @keyframes tvStatic {
+        0% {
+            transform: translateX(0) translateY(0);
+        }
+        100% {
+            transform: translateX(-50px) translateY(50px);
+        }
+    }
+
+    .hero::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(0,212,255,0.03) 2px,
+            rgba(0,212,255,0.03) 4px
+        );
+        animation: scanlines 8s linear infinite;
+        pointer-events: none;
+    }
+
+    @keyframes scanlines {
+        0% {
+            transform: translateY(0);
+        }
+        100% {
+            transform: translateY(20px);
+        }
+    }
+
+    .hero h1 {
+        font-size: 52px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 16px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-subtitle {
+        font-size: 17px;
+        color: rgba(255, 255, 255, 0.75);
+        max-width: 850px;
+        margin: 0 auto 24px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-meta {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        flex-wrap: wrap;
+        position: relative;
+        z-index: 1;
+    }
+
+    .meta-badge {
+        background: rgba(0, 212, 255, 0.1);
+        border: 1px solid rgba(0, 212, 255, 0.3);
+        padding: 8px 18px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #00d4ff;
+    }
+
+    .meta-badge i {
+        margin-right: 6px;
+    }
+
+    main {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 60px 40px;
+    }
+
+    .scroll-animate {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .scroll-animate.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .alert-box {
+        background: rgba(255, 193, 7, 0.1);
+        border: 2px solid rgba(255, 193, 7, 0.4);
+        border-left: 4px solid #ffc107;
+        padding: 24px;
+        margin-bottom: 50px;
+    }
+
+    .alert-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 20px;
+        color: #ffc107;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .alert-box p {
+        font-size: 16px;
+        color: rgba(255, 255, 255, 0.85);
+    }
+
+    .formation-section {
+        margin-bottom: 60px;
+    }
+
+    .section-header {
+        background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 149, 255, 0.05));
+        border-left: 4px solid #00d4ff;
+        padding: 24px 30px;
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .section-header h2 {
+        font-size: 36px;
+        font-weight: 700;
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .points-badge {
+        background: linear-gradient(135deg, #00d4ff, #0095ff);
+        padding: 10px 24px;
+        font-size: 16px;
+        font-weight: 700;
+        color: #0a0e1a;
+        letter-spacing: 1px;
+    }
+
+    .content-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 32px;
+        margin-bottom: 30px;
+    }
+
+    .content-card h3 {
+        font-size: 24px;
+        color: #00d4ff;
+        margin-bottom: 20px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    blockquote {
+        background: rgba(0, 212, 255, 0.05);
+        border-left: 3px solid #00d4ff;
+        padding: 20px;
+        margin: 20px 0;
+        font-size: 15px;
+        line-height: 1.8;
+        color: rgba(255, 255, 255, 0.85);
+    }
+
+    blockquote strong {
+        color: #00d4ff;
+        font-weight: 700;
+    }
+
+    .test-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 20px;
+        margin-top: 30px;
+    }
+
+    .test-item {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(0, 212, 255, 0.2);
+        padding: 24px;
+        transition: all 0.3s ease;
+    }
+
+    .test-item:hover {
+        background: rgba(0, 212, 255, 0.1);
+        border-color: #00d4ff;
+        transform: translateY(-5px);
+    }
+
+    .test-icon {
+        font-size: 40px;
+        color: #00d4ff;
+        margin-bottom: 16px;
+        text-align: center;
+    }
+
+    .test-name {
+        font-size: 18px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 12px;
+        text-align: center;
+    }
+
+    .test-desc {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 16px;
+        line-height: 1.7;
+    }
+
+    .test-desc strong {
+        color: #00d4ff;
+    }
+
+    .test-points {
+        background: linear-gradient(135deg, #00d4ff, #0095ff);
+        padding: 8px 20px;
+        display: block;
+        text-align: center;
+        font-weight: 700;
+        color: #0a0e1a;
+        font-size: 14px;
+        margin-top: 12px;
+    }
+
+    .bonus-info {
+        background: rgba(0, 255, 157, 0.1);
+        border: 1px solid rgba(0, 255, 157, 0.3);
+        border-left: 3px solid #00ff9d;
+        padding: 16px;
+        margin: 16px 0;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.85);
+    }
+
+    .bonus-info strong {
+        color: #00ff9d;
+    }
+
+    .malus-info {
+        background: rgba(255, 107, 0, 0.1);
+        border: 1px solid rgba(255, 107, 0, 0.3);
+        border-left: 3px solid #ff6b00;
+        padding: 16px;
+        margin: 16px 0;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.85);
+    }
+
+    .malus-info strong {
+        color: #ff8c00;
+    }
+
+    footer {
+        background: rgba(10, 14, 26, 0.98);
+        border-top: 1px solid rgba(0, 212, 255, 0.3);
+        padding: 40px 40px 24px;
+        margin-top: 60px;
+    }
+
+    .footer-content {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .footer-top {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 24px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .footer-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #00d4ff;
+        margin-bottom: 10px;
+    }
+
+    .footer-content p {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 13px;
+        margin: 4px 0;
+    }
+
+    .copyright {
+        text-align: center;
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 12px;
+    }
+
+    @media (max-width: 768px) {
+        .hero h1 {
+            font-size: 36px;
+        }
+
+        .section-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .test-grid {
+            grid-template-columns: 1fr;
+        }
+
+        main {
+            padding: 40px 20px;
+        }
+
+        .footer-top {
+            flex-direction: column;
+            gap: 20px;
+        }
+    }
+</style>
+</head>
+<body>
+    <div class="header-strip"></div>
+<div class="game-banner">
+    <i class="fas fa-gamepad"></i> CONTENU FICTIF - JEU BLACKHAWK MISSION RESCUE 5
+</div>
+
+<header>
+    <div class="header-content">
+        <div class="site-title">
+            <h1>Division Sierra</h1>
+        </div>
+    </div>
+</header>
+
+<div class="hero">
+    <h1>Formation de Base</h1>
+    <p class="hero-subtitle">
+        La Division Sierra est une unité d'élite de l'armée de terre française, mandatée par l'UNO pour des missions à très haut risque nécessitant une expertise opérationnelle exceptionnelle.
+    </p>
+    <div class="hero-meta">
+        <div class="meta-badge">
+            <i class="fas fa-clock"></i>
+            Durée : 1h30 ~ 2h
+        </div>
+        <div class="meta-badge">
+            <i class="fas fa-chart-line"></i>
+            Total : 100 points
+        </div>
+        <div class="meta-badge">
+            <i class="fas fa-check-circle"></i>
+            Minimum : 35 points
+        </div>
+    </div>
+</div>
+
+<main>
+    <div class="alert-box scroll-animate">
+        <div class="alert-title">
+            <i class="fas fa-exclamation-triangle"></i>
+            Critères de Validation
+        </div>
+        <p>La formation est notée sur <strong>100 points</strong>. Pour réussir et intégrer la Division Sierra, il vous faut obtenir au minimum <strong>35 points</strong>.</p>
+    </div>
+
+    <div class="formation-section scroll-animate">
+        <div class="section-header">
+            <h2>Formation Pratique</h2>
+            <div class="points-badge">50 POINTS</div>
+        </div>
+
+        <div class="content-card">
+            <h3>
+                <i class="fas fa-clipboard-list"></i>
+                Déroulé
+            </h3>
+            <blockquote>
+                La formation pratique commence par la <strong>vérification complète de votre équipement</strong> et la <strong>découverte des véhicules</strong>. Après cela, un <strong>premier test de tirs</strong> sera effectué pour évaluer votre <strong>précision</strong> et votre <strong>maîtrise des armes</strong>. Ensuite, une <strong>formation au secours de victimes</strong> sera effectuée, testant vos <strong>compétences médicales</strong> et votre <strong>rapidité d'intervention</strong>. Enfin, un <strong>assaut dans le bâtiment d'entraînement</strong> où vous prendrez la tête de l'assaut en <strong>coordination avec les autres recrues</strong>, démontrant vos capacités de <strong>leadership tactique</strong> et de <strong>communication</strong>.
+            </blockquote>
+
+            <div class="test-grid">
+                <div class="test-item scroll-animate">
+                    <div class="test-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <div class="test-name">Test de Tirs</div>
+                    <div class="test-desc">
+                        • <strong>40 cibles</strong> à éliminer<br>
+                        • <strong>Distances variées</strong> : 25m, 50m, 100m<br>
+                        • <strong>+0.5 point</strong> par cible touchée<br>
+                        • <strong>Bonus de précision</strong> : +2 points si 90% de précision ou plus<br>
+                        • <strong>Temps limité</strong> : 10 minutes maximum
+                    </div>
+                    <div class="test-points">20 POINTS</div>
+                </div>
+
+                <div class="test-item scroll-animate">
+                    <div class="test-icon">
+                        <i class="fas fa-heart-pulse"></i>
+                    </div>
+                    <div class="test-name">Secours aux Victimes</div>
+                    <div class="test-desc">
+                        • <strong>3 victimes</strong> à secourir (minimum requis)<br>
+                        • <strong>+5 points</strong> par victime stabilisée correctement<br>
+                        • <strong>Bonus</strong> : +3 points par victime supplémentaire au-delà de 3<br>
+                        • Évaluation : <strong>garrots</strong>, <strong>pansements compressifs</strong>, <strong>PLS</strong><br>
+                        • <strong>Temps de réaction</strong> : moins de 2 min par victime
+                    </div>
+                    <div class="test-points">15 POINTS</div>
+                </div>
+
+                <div class="test-item scroll-animate">
+                    <div class="test-icon">
+                        <i class="fas fa-building-shield"></i>
+                    </div>
+                    <div class="test-name">Assaut Bâtiment</div>
+                    <div class="test-desc">
+                        • <strong>Bâtiment à 3 étages</strong> à sécuriser<br>
+                        • <strong>8 hostiles</strong> à neutraliser<br>
+                        • <strong>+1.5 point</strong> par hostile neutralisé<br>
+                        • <strong>Bonus coordination</strong> : +3 points si aucun coéquipier blessé<br>
+                        • <strong>Communication tactique</strong> obligatoire
+                    </div>
+                    <div class="test-points">15 POINTS</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="formation-section scroll-animate">
+        <div class="section-header">
+            <h2>Formation sur le Terrain</h2>
+            <div class="points-badge">50 POINTS</div>
+        </div>
+
+        <div class="content-card">
+            <h3>
+                <i class="fas fa-helicopter"></i>
+                Déroulé
+            </h3>
+            <blockquote>
+                Après <strong>vérification des armes</strong> et <strong>du/des véhicules</strong>, les recrues partiront en <strong>hélicoptère(s)</strong> sur un <strong>site hostile réel</strong>. Les recrues pourront <strong>appeler des unités de renforcement</strong> en cas de besoin critique (disponibles après <strong>2 minutes</strong> d'attente). L'utilisation <strong>stratégique</strong> des renforts au bon moment peut rapporter des <strong>points bonus</strong>. Si les recrues échouent la mission, elles ont la possibilité de <strong>retenter l'assaut</strong>, mais avec un <strong>handicap</strong> : départ avec <strong>50% de munitions</strong> et un <strong>malus de -10 points</strong> sur la note finale.
+            </blockquote>
+
+            <div class="bonus-info scroll-animate">
+                <strong><i class="fas fa-plus-circle"></i> Points Bonus :</strong><br>
+                • Appel de renforcement <strong>stratégique</strong> (au bon moment) : <strong>+5 points</strong><br>
+                • Mission réussie en <strong>moins de 15 minutes</strong> : <strong>+8 points</strong><br>
+                • <strong>Aucune perte</strong> dans l'équipe : <strong>+7 points</strong>
+            </div>
+
+            <div class="malus-info scroll-animate">
+                <strong><i class="fas fa-minus-circle"></i> Pénalités :</strong><br>
+                • <strong>Échec</strong> nécessitant une nouvelle tentative : <strong>-10 points</strong><br>
+                • Seconde tentative : départ avec <strong>50% de munitions seulement</strong><br>
+                • <strong>Plus de 2 morts</strong> dans l'équipe : <strong>-5 points</strong>
+            </div>
+
+            <div class="test-grid">
+                <div class="test-item scroll-animate">
+                    <div class="test-icon">
+                        <i class="fas fa-shield"></i>
+                    </div>
+                    <div class="test-name">Survie en Zone Hostile</div>
+                    <div class="test-desc">
+                        • <strong>Rester en vie</strong> pendant toute la mission<br>
+                        • <strong>Gestion du stress</strong> sous le feu<br>
+                        • <strong>Utilisation du couvert</strong> et déplacements tactiques<br>
+                        • <strong>+15 points</strong> si aucun membre de l'équipe n'est éliminé
+                    </div>
+                    <div class="test-points">15 POINTS</div>
+                </div>
+
+                <div class="test-item scroll-animate">
+                    <div class="test-icon">
+                        <i class="fas fa-crosshairs"></i>
+                    </div>
+                    <div class="test-name">Élimination des Cibles</div>
+                    <div class="test-desc">
+                        • <strong>Minimum 15 hostiles</strong> à neutraliser<br>
+                        • <strong>+1 point</strong> par hostile éliminé<br>
+                        • <strong>Bonus précision</strong> : +5 points si 80% de headshots<br>
+                        • <strong>Identification</strong> des cibles prioritaires
+                    </div>
+                    <div class="test-points">20 POINTS</div>
+                </div>
+
+                <div class="test-item scroll-animate">
+                    <div class="test-icon">
+                        <i class="fas fa-flag-checkered"></i>
+                    </div>
+                    <div class="test-name">Sécurisation de Zone</div>
+                    <div class="test-desc">
+                        • <strong>Zone complète</strong> à sécuriser<br>
+                        • <strong>Vérification de chaque bâtiment</strong><br>
+                        • <strong>Établissement d'un périmètre</strong> de sécurité<br>
+                        • <strong>+15 points</strong> si zone 100% sécurisée
+                    </div>
+                    <div class="test-points">15 POINTS</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-content">
+        <div class="footer-top">
+            <div>
+                <div class="footer-title">Division Sierra</div>
+                <p>BlackHawk Mission Rescue 5</p>
+                <p>Contenu fictif créé pour le jeu</p>
+                <p>Non affilié au gouvernement français ou à l'UNO</p>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2025 Division Sierra. Tous droits réservés.
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Animation au scroll
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.scroll-animate').forEach(el => {
+        observer.observe(el);
+    });
+</script>
+</body>
+</html>
