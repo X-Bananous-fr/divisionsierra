@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Division Sierra - Formations</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Rajdhani', sans-serif;
+        background: #0a0e1a;
+        color: #e0e0e0;
+        line-height: 1.6;
+    }
+
+    .header-strip {
+        background: linear-gradient(to right, #000091 0%, #000091 33%, #FFFFFF 33%, #FFFFFF 66%, #E1000F 66%, #E1000F 100%);
+        height: 4px;
+    }
+
+    .game-banner {
+        background: linear-gradient(135deg, #ff6b00, #ff8c00);
+        color: white;
+        text-align: center;
+        padding: 10px;
+        font-weight: 600;
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+
+    header {
+        background: rgba(15, 20, 35, 0.98);
+        padding: 18px 0;
+        border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+    }
+
+    .header-content {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 40px;
+    }
+
+    .site-title h1 {
+        font-size: 26px;
+        font-weight: 700;
+        color: #00d4ff;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        text-align: left;
+    }
+
+    .hero {
+        background: linear-gradient(135deg, #0f1423 0%, #1a1f35 100%);
+        padding: 80px 40px;
+        text-align: center;
+        border-bottom: 2px solid #00d4ff;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 200%;
+        height: 100%;
+        background-image: 
+            radial-gradient(circle, rgba(0,212,255,0.15) 1px, transparent 1px),
+            radial-gradient(circle, rgba(0,212,255,0.1) 1px, transparent 1px);
+        background-size: 50px 50px, 30px 30px;
+        background-position: 0 0, 25px 25px;
+        animation: tvStatic 8s linear infinite;
+        pointer-events: none;
+        opacity: 0.3;
+    }
+
+    @keyframes tvStatic {
+        0% {
+            transform: translateX(0) translateY(0);
+        }
+        100% {
+            transform: translateX(-50px) translateY(50px);
+        }
+    }
+
+    .hero::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(0,212,255,0.03) 2px,
+            rgba(0,212,255,0.03) 4px
+        );
+        animation: scanlines 8s linear infinite;
+        pointer-events: none;
+    }
+
+    @keyframes scanlines {
+        0% {
+            transform: translateY(0);
+        }
+        100% {
+            transform: translateY(20px);
+        }
+    }
+
+    .hero h1 {
+        font-size: 56px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 16px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-subtitle {
+        font-size: 18px;
+        color: rgba(255, 255, 255, 0.75);
+        max-width: 900px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+    }
+
+    main {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 60px 40px 80px;
+    }
+
+    .scroll-animate {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .scroll-animate.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .section-divider {
+        margin: 60px 0 40px;
+    }
+
+    .section-title {
+        font-size: 42px;
+        font-weight: 700;
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .section-title::after {
+        content: '';
+        flex: 1;
+        height: 2px;
+        background: linear-gradient(90deg, #00d4ff, transparent);
+    }
+
+    .section-description {
+        font-size: 16px;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 30px;
+    }
+
+    .formations-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+        gap: 30px;
+        margin-top: 30px;
+    }
+
+    .formation-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 2px solid rgba(0, 212, 255, 0.2);
+        padding: 32px;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .formation-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .formation-card:hover::before {
+        left: 100%;
+    }
+
+    .formation-card:hover {
+        background: rgba(0, 212, 255, 0.08);
+        border-color: #00d4ff;
+        transform: translateY(-8px);
+        box-shadow: 0 12px 40px rgba(0, 212, 255, 0.3);
+    }
+
+    .formation-icon {
+        font-size: 48px;
+        color: #00d4ff;
+        margin-bottom: 20px;
+    }
+
+    .formation-name {
+        font-size: 28px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+    }
+
+    .formation-meta {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+    }
+
+    .meta-item {
+        background: rgba(0, 212, 255, 0.1);
+        border: 1px solid rgba(0, 212, 255, 0.3);
+        padding: 6px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #00d4ff;
+    }
+
+    .formation-description {
+        font-size: 15px;
+        color: rgba(255, 255, 255, 0.75);
+        line-height: 1.7;
+        margin-bottom: 20px;
+    }
+
+    .formation-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #00d4ff;
+        font-weight: 700;
+        font-size: 15px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .formation-link:hover {
+        gap: 12px;
+        color: white;
+    }
+
+    .special-badge {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #a855f7, #8a2be2);
+        color: white;
+        padding: 6px 12px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+
+    footer {
+        background: rgba(10, 14, 26, 0.98);
+        border-top: 1px solid rgba(0, 212, 255, 0.3);
+        padding: 40px 40px 24px;
+        margin-top: 60px;
+    }
+
+    .footer-content {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .footer-top {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 24px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .footer-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #00d4ff;
+        margin-bottom: 10px;
+    }
+
+    .footer-content p {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 13px;
+        margin: 4px 0;
+    }
+
+    .copyright {
+        text-align: center;
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 12px;
+    }
+
+    @media (max-width: 768px) {
+        .hero h1 {
+            font-size: 38px;
+        }
+
+        .formations-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .section-title {
+            font-size: 32px;
+        }
+
+        main {
+            padding: 40px 20px;
+        }
+
+        .footer-top {
+            flex-direction: column;
+            gap: 20px;
+        }
+    }
+</style>
+
+</head>
+<body>
+    <div class="header-strip"></div>
+<div class="game-banner">
+    <i class="fas fa-gamepad"></i> CONTENU FICTIF - JEU BLACKHAWK MISSION RESCUE 5
+</div>
+
+<header>
+    <div class="header-content">
+        <div class="site-title">
+            <h1>Division Sierra</h1>
+        </div>
+    </div>
+</header>
+
+<div class="hero">
+    <h1>Formations</h1>
+    <p class="hero-subtitle">
+        Découvrez les différentes formations disponibles au sein de la Division Sierra. De la formation de base aux spécialisations avancées, chaque parcours vous prépare aux missions les plus exigeantes.
+    </p>
+</div>
+
+<main>
+    <!-- FORMATION DE BASE -->
+    <div class="section-divider scroll-animate">
+        <h2 class="section-title">
+            <i class="fas fa-graduation-cap"></i>
+            Formation de Base
+        </h2>
+        <p class="section-description">
+            Formation initiale obligatoire pour tous les agents de la Division Sierra. Cette formation évalue vos compétences fondamentales en combat, tactique et survie.
+        </p>
+    </div>
+
+    <div class="formations-grid">
+        <div class="formation-card scroll-animate">
+            <div class="formation-icon">
+                <i class="fas fa-shield-halved"></i>
+            </div>
+            <div class="formation-name">Formation de Base</div>
+            <div class="formation-meta">
+                <span class="meta-item"><i class="fas fa-clock"></i> 1h30 ~ 2h</span>
+                <span class="meta-item"><i class="fas fa-chart-line"></i> 100 points</span>
+                <span class="meta-item"><i class="fas fa-check-circle"></i> Min. 35 points</span>
+            </div>
+            <p class="formation-description">
+                Formation complète couvrant les compétences essentielles : tir de précision, secours aux victimes, assaut tactique et opérations sur le terrain. Cette formation est le prérequis pour toutes les spécialisations.
+            </p>
+            <a href="forma_base.html" class="formation-link">
+                Accéder à la formation <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- FORMATIONS DE SPÉCIALITÉ -->
+    <div class="section-divider scroll-animate" style="margin-top: 80px;">
+        <h2 class="section-title">
+            <i class="fas fa-star"></i>
+            Formations de Spécialité
+        </h2>
+        <p class="section-description">
+            Une fois la formation de base validée, spécialisez-vous dans un domaine d'expertise spécifique pour devenir un atout stratégique majeur de votre escouade.
+        </p>
+    </div>
+
+    <div class="formations-grid">
+        <div class="formation-card scroll-animate">
+            <div class="formation-icon">
+                <i class="fas fa-helicopter"></i>
+            </div>
+            <div class="formation-name">Pilote</div>
+            <div class="formation-meta">
+                <span class="meta-item"><i class="fas fa-clock"></i> ~1h</span>
+                <span class="meta-item"><i class="fas fa-chart-line"></i> 50 points</span>
+                <span class="meta-item"><i class="fas fa-check-circle"></i> Min. 40 points</span>
+            </div>
+            <p class="formation-description">
+                Maîtrisez le pilotage d'hélicoptères en conditions extrêmes. Vérifications pré-vol, décollage tactique, déploiement de troupes et survie sous tirs d'artillerie. Formation intensive pour pilotes d'élite.
+            </p>
+            <a href="forma_spe_heli.html" class="formation-link">
+                Accéder à la formation <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <div class="formation-card scroll-animate">
+            <div class="formation-icon">
+                <i class="fas fa-gun"></i>
+            </div>
+            <div class="formation-name">Mitrailleur</div>
+            <div class="formation-meta">
+                <span class="meta-item"><i class="fas fa-clock"></i> ~1h30</span>
+                <span class="meta-item"><i class="fas fa-chart-line"></i> 100 points</span>
+                <span class="meta-item"><i class="fas fa-check-circle"></i> Min. 50 points</span>
+            </div>
+            <p class="formation-description">
+                Spécialisation en armes lourdes montées. Maîtrisez la mitrailleuse lourde sur VBMR et la défense statique avec mitrailleuse légère. Protection d'équipage et éliminations massives.
+            </p>
+            <a href="forma_spe_mit.html" class="formation-link">
+                Accéder à la formation <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <div class="formation-card scroll-animate">
+            <div class="formation-icon">
+                <i class="fas fa-user-doctor"></i>
+            </div>
+            <div class="formation-name">Médecin de Combat</div>
+            <div class="formation-meta">
+                <span class="meta-item"><i class="fas fa-clock"></i> ~1h30</span>
+                <span class="meta-item"><i class="fas fa-chart-line"></i> 50 points</span>
+                <span class="meta-item"><i class="fas fa-check-circle"></i> Min. 35 points</span>
+            </div>
+            <p class="formation-description">
+                Devenez le sauveur de votre escouade. Soins d'urgence en zone hostile, alternance combat/médecine, gestion du stress et sens tactique. Évaluation qualitative de vos compétences médicales.
+            </p>
+            <a href="forma_spe_medic.html" class="formation-link">
+                Accéder à la formation <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <div class="formation-card scroll-animate">
+            <span class="special-badge">Unique</span>
+            <div class="formation-icon">
+                <i class="fas fa-tower-broadcast"></i>
+            </div>
+            <div class="formation-name">Opérateur Radio</div>
+            <div class="formation-meta">
+                <span class="meta-item"><i class="fas fa-infinity"></i> Évaluation Continue</span>
+                <span class="meta-item"><i class="fas fa-chart-line"></i> Base 50 pts</span>
+            </div>
+            <p class="formation-description">
+                Spécialité unique sans formation requise. Devenez le lien vital entre votre escouade et le commandement. Évaluation continue sur le terrain avec système de malus/récupération périodique.
+            </p>
+            <a href="forma_spe_radio.html" class="formation-link">
+                Accéder à la formation <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <div class="formation-card scroll-animate">
+            <div class="formation-icon">
+                <i class="fas fa-eye"></i>
+            </div>
+            <div class="formation-name">Éclaireur</div>
+            <div class="formation-meta">
+                <span class="meta-item"><i class="fas fa-clock"></i> 10 minutes</span>
+                <span class="meta-item"><i class="fas fa-chart-line"></i> 50 points</span>
+                <span class="meta-item"><i class="fas fa-map-marked-alt"></i> Ronograd City</span>
+            </div>
+            <p class="formation-description">
+                Infiltration furtive dans Ronograd City. Récoltez un maximum de renseignements, éliminez des cibles en mode stealth et restez invisible. La discrétion est votre arme la plus puissante.
+            </p>
+            <a href="forma_spe_ecl.html" class="formation-link">
+                Accéder à la formation <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-content">
+        <div class="footer-top">
+            <div>
+                <div class="footer-title">Division Sierra</div>
+                <p>BlackHawk Mission Rescue 5</p>
+                <p>Contenu fictif créé pour le jeu</p>
+                <p>Non affilié au gouvernement français ou à l'UNO</p>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2025 Division Sierra. Tous droits réservés.
+        </div>
+    </div>
+</footer>
+
+<script>
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.scroll-animate').forEach(el => {
+        observer.observe(el);
+    });
+</script>
+
+</body>
+</html>
