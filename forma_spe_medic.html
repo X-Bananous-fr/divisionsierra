@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Division Sierra - Formation Spécialité Médecin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Rajdhani', sans-serif;
+        background: #0a0e1a;
+        color: #e0e0e0;
+        line-height: 1.6;
+    }
+
+    .header-strip {
+        background: linear-gradient(to right, #000091 0%, #000091 33%, #FFFFFF 33%, #FFFFFF 66%, #E1000F 66%, #E1000F 100%);
+        height: 4px;
+    }
+
+    .game-banner {
+        background: linear-gradient(135deg, #ff6b00, #ff8c00);
+        color: white;
+        text-align: center;
+        padding: 10px;
+        font-weight: 600;
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+
+    header {
+        background: rgba(15, 20, 35, 0.98);
+        padding: 18px 0;
+        border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+    }
+
+    .header-content {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 40px;
+    }
+
+    .site-title h1 {
+        font-size: 26px;
+        font-weight: 700;
+        color: #00d4ff;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        text-align: left;
+    }
+
+    .hero {
+        background: linear-gradient(135deg, #0f1423 0%, #1a1f35 100%);
+        padding: 60px 40px;
+        text-align: center;
+        border-bottom: 2px solid #00d4ff;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 200%;
+        height: 100%;
+        background-image: 
+            radial-gradient(circle, rgba(0,212,255,0.15) 1px, transparent 1px),
+            radial-gradient(circle, rgba(0,212,255,0.1) 1px, transparent 1px);
+        background-size: 50px 50px, 30px 30px;
+        background-position: 0 0, 25px 25px;
+        animation: tvStatic 8s linear infinite;
+        pointer-events: none;
+        opacity: 0.3;
+    }
+
+    @keyframes tvStatic {
+        0% {
+            transform: translateX(0) translateY(0);
+        }
+        100% {
+            transform: translateX(-50px) translateY(50px);
+        }
+    }
+
+    .hero::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(0,212,255,0.03) 2px,
+            rgba(0,212,255,0.03) 4px
+        );
+        animation: scanlines 8s linear infinite;
+        pointer-events: none;
+    }
+
+    @keyframes scanlines {
+        0% {
+            transform: translateY(0);
+        }
+        100% {
+            transform: translateY(20px);
+        }
+    }
+
+    .hero h1 {
+        font-size: 52px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 8px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-specialty {
+        font-size: 28px;
+        font-weight: 600;
+        color: #00d4ff;
+        margin-bottom: 16px;
+        letter-spacing: 1px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-subtitle {
+        font-size: 17px;
+        color: rgba(255, 255, 255, 0.75);
+        max-width: 850px;
+        margin: 0 auto 24px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-meta {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        flex-wrap: wrap;
+        position: relative;
+        z-index: 1;
+    }
+
+    .meta-badge {
+        background: rgba(0, 212, 255, 0.1);
+        border: 1px solid rgba(0, 212, 255, 0.3);
+        padding: 8px 18px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #00d4ff;
+    }
+
+    .meta-badge i {
+        margin-right: 6px;
+    }
+
+    main {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 60px 40px;
+    }
+
+    .scroll-animate {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .scroll-animate.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .alert-box {
+        background: rgba(255, 193, 7, 0.1);
+        border: 2px solid rgba(255, 193, 7, 0.4);
+        border-left: 4px solid #ffc107;
+        padding: 24px;
+        margin-bottom: 50px;
+    }
+
+    .alert-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 20px;
+        color: #ffc107;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .alert-box p {
+        font-size: 16px;
+        color: rgba(255, 255, 255, 0.85);
+    }
+
+    .mission-section {
+        margin-bottom: 60px;
+    }
+
+    .section-header {
+        background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(0, 149, 255, 0.08));
+        border-left: 4px solid #00d4ff;
+        padding: 24px 30px;
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .section-title {
+        font-size: 36px;
+        font-weight: 700;
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .points-badge {
+        background: linear-gradient(135deg, #00d4ff, #0095ff);
+        padding: 10px 24px;
+        font-size: 16px;
+        font-weight: 700;
+        color: #0a0e1a;
+        letter-spacing: 1px;
+    }
+
+    .content-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 32px;
+        margin-bottom: 30px;
+    }
+
+    .content-card h3 {
+        font-size: 24px;
+        color: #00d4ff;
+        margin-bottom: 20px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .description-text {
+        background: rgba(0, 212, 255, 0.05);
+        border-left: 3px solid #00d4ff;
+        padding: 20px;
+        margin: 20px 0;
+        font-size: 15px;
+        line-height: 1.8;
+        color: rgba(255, 255, 255, 0.85);
+    }
+
+    .description-text strong {
+        color: #00d4ff;
+        font-weight: 700;
+    }
+
+    .evaluation-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 24px;
+        margin: 30px 0;
+    }
+
+    .eval-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 2px solid rgba(0, 212, 255, 0.2);
+        padding: 28px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .eval-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 0;
+        background: linear-gradient(135deg, #00d4ff, #0095ff);
+        transition: height 0.3s ease;
+    }
+
+    .eval-card:hover {
+        background: rgba(0, 212, 255, 0.08);
+        border-color: #00d4ff;
+        transform: translateY(-5px);
+    }
+
+    .eval-card:hover::before {
+        height: 100%;
+    }
+
+    .eval-icon {
+        font-size: 42px;
+        color: #00d4ff;
+        margin-bottom: 16px;
+    }
+
+    .eval-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 12px;
+    }
+
+    .eval-desc {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.75);
+        line-height: 1.7;
+        margin-bottom: 16px;
+    }
+
+    .eval-desc strong {
+        color: #00d4ff;
+    }
+
+    .eval-items {
+        list-style: none;
+        margin-top: 16px;
+    }
+
+    .eval-items li {
+        padding: 8px 0;
+        padding-left: 24px;
+        position: relative;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 14px;
+    }
+
+    .eval-items li::before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        color: #00ff9d;
+        font-weight: 700;
+    }
+
+    .skills-box {
+        background: linear-gradient(135deg, rgba(0, 255, 157, 0.1), rgba(0, 212, 255, 0.05));
+        border: 2px solid rgba(0, 255, 157, 0.3);
+        border-left: 4px solid #00ff9d;
+        padding: 28px;
+        margin: 30px 0;
+    }
+
+    .skills-box h4 {
+        color: #00ff9d;
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 16px;
+        margin-top: 20px;
+    }
+
+    .skill-item {
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(0, 255, 157, 0.2);
+        padding: 16px;
+        transition: all 0.3s ease;
+    }
+
+    .skill-item:hover {
+        background: rgba(0, 255, 157, 0.05);
+        border-color: #00ff9d;
+        transform: translateX(5px);
+    }
+
+    .skill-item strong {
+        color: #00ff9d;
+        display: block;
+        margin-bottom: 6px;
+        font-size: 15px;
+    }
+
+    .skill-item p {
+        color: rgba(255, 255, 255, 0.75);
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .warning-box {
+        background: rgba(255, 107, 0, 0.1);
+        border: 2px solid rgba(255, 107, 0, 0.4);
+        border-left: 4px solid #ff6b00;
+        padding: 24px;
+        margin: 30px 0;
+    }
+
+    .warning-box h4 {
+        color: #ff8c00;
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .warning-box p {
+        font-size: 15px;
+        color: rgba(255, 255, 255, 0.85);
+        line-height: 1.7;
+    }
+
+    .warning-box strong {
+        color: #ff8c00;
+    }
+
+    footer {
+        background: rgba(10, 14, 26, 0.98);
+        border-top: 1px solid rgba(0, 212, 255, 0.3);
+        padding: 40px 40px 24px;
+        margin-top: 60px;
+    }
+
+    .footer-content {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .footer-top {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 24px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .footer-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #00d4ff;
+        margin-bottom: 10px;
+    }
+
+    .footer-content p {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 13px;
+        margin: 4px 0;
+    }
+
+    .copyright {
+        text-align: center;
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 12px;
+    }
+
+    @media (max-width: 768px) {
+        .hero h1 {
+            font-size: 36px;
+        }
+
+        .hero-specialty {
+            font-size: 22px;
+        }
+
+        .section-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .evaluation-grid,
+        .skills-grid {
+            grid-template-columns: 1fr;
+        }
+
+        main {
+            padding: 40px 20px;
+        }
+
+        .footer-top {
+            flex-direction: column;
+            gap: 20px;
+        }
+    }
+</style>
+</head>
+<body>
+    <div class="header-strip"></div>
+<div class="game-banner">
+    <i class="fas fa-gamepad"></i> CONTENU FICTIF - JEU BLACKHAWK MISSION RESCUE 5
+</div>
+
+<header>
+    <div class="header-content">
+        <div class="site-title">
+            <h1>Division Sierra</h1>
+        </div>
+    </div>
+</header>
+
+<div class="hero">
+    <h1>Formation de Spécialité</h1>
+    <div class="hero-specialty"><i class="fas fa-user-doctor"></i> MÉDECIN DE COMBAT</div>
+    <p class="hero-subtitle">
+        Formation avancée pour les médecins de combat de la Division Sierra. Cette spécialisation vous formera aux soins d'urgence en zone hostile, à la gestion du stress et à l'alternance entre combat et soin médical.
+    </p>
+    <div class="hero-meta">
+        <div class="meta-badge">
+            <i class="fas fa-clock"></i>
+            Durée : ~1h30
+        </div>
+        <div class="meta-badge">
+            <i class="fas fa-chart-line"></i>
+            Total : 50 points
+        </div>
+        <div class="meta-badge">
+            <i class="fas fa-check-circle"></i>
+            Minimum : 35 points
+        </div>
+    </div>
+</div>
+
+<main>
+    <div class="alert-box scroll-animate">
+        <div class="alert-title">
+            <i class="fas fa-exclamation-triangle"></i>
+            Critères de Validation
+        </div>
+        <p>La formation est notée sur <strong>50 points</strong>. Pour valider votre spécialité Médecin de Combat, il vous faut obtenir au minimum <strong>35 points</strong>. Cette formation évalue votre capacité à <strong>sauver des vies</strong> tout en <strong>restant opérationnel</strong> sous le feu ennemi.</p>
+    </div>
+
+    <div class="mission-section scroll-animate">
+        <div class="section-header">
+            <div class="section-title">Mission d'Urgence Médicale</div>
+            <div class="points-badge">50 POINTS</div>
+        </div>
+
+        <div class="content-card">
+            <h3>
+                <i class="fas fa-briefcase-medical"></i>
+                Contexte de la Mission
+            </h3>
+            <div class="description-text">
+                Vous intervenez sur la <strong>même zone hostile</strong> que lors de la formation Mitrailleur (Partie 2). Votre équipe est <strong>engagée dans un assaut</strong> contre des forces ennemies. En tant que <strong>médecin de combat</strong>, votre rôle est de <strong>maintenir l'équipe en vie</strong> tout en participant au combat lorsque nécessaire. Vous devez démontrer votre capacité à <strong>alterner entre soin et combat</strong>, à <strong>prioriser les urgences</strong>, et à <strong>vous mettre en retrait</strong> pour prodiguer des soins en toute sécurité.
+            </div>
+
+            <div class="warning-box scroll-animate">
+                <h4><i class="fas fa-info-circle"></i> Système d'Évaluation</h4>
+                <p>
+                    Cette formation <strong>n'a pas de barème fixe</strong>. Votre performance est évaluée de manière <strong>qualitative</strong> par les instructeurs sur la base de plusieurs critères clés. Les points sont attribués en fonction de votre <strong>efficacité globale</strong>, de votre <strong>rapidité de réaction</strong> et de votre <strong>sens tactique</strong>. Un bon médecin de combat sait <strong>quand combattre</strong> et <strong>quand soigner</strong>.
+                </p>
+            </div>
+        </div>
+
+        <div class="content-card scroll-animate">
+            <h3>
+                <i class="fas fa-clipboard-check"></i>
+                Critères d'Évaluation
+            </h3>
+
+            <div class="evaluation-grid">
+                <div class="eval-card scroll-animate">
+                    <div class="eval-icon">
+                        <i class="fas fa-hand-holding-medical"></i>
+                    </div>
+                    <div class="eval-title">Efficacité des Soins</div>
+                    <div class="eval-desc">
+                        Votre capacité à <strong>soigner rapidement</strong> et <strong>efficacement</strong> les blessés pendant l'assaut.
+                    </div>
+                    <ul class="eval-items">
+                        <li><strong>Vitesse d'intervention</strong> auprès des blessés</li>
+                        <li><strong>Qualité des soins</strong> prodigués</li>
+                        <li><strong>Stabilisation réussie</strong> des patients critiques</li>
+                        <li><strong>Nombre de vies sauvées</strong></li>
+                    </ul>
+                </div>
+
+                <div class="eval-card scroll-animate">
+                    <div class="eval-icon">
+                        <i class="fas fa-people-arrows"></i>
+                    </div>
+                    <div class="eval-title">Gestion Combat/Soin</div>
+                    <div class="eval-desc">
+                        Votre capacité à <strong>alterner intelligemment</strong> entre le combat et les soins médicaux.
+                    </div>
+                    <ul class="eval-items">
+                        <li><strong>Transition fluide</strong> entre combat et soin</li>
+                        <li><strong>Participation au combat</strong> quand nécessaire</li>
+                        <li><strong>Priorisation des actions</strong> selon la situation</li>
+                        <li><strong>Équilibre</strong> entre les deux rôles</li>
+                    </ul>
+                </div>
+
+                <div class="eval-card scroll-animate">
+                    <div class="eval-icon">
+                        <i class="fas fa-shield"></i>
+                    </div>
+                    <div class="eval-title">Sens Tactique</div>
+                    <div class="eval-desc">
+                        Votre capacité à vous <strong>positionner stratégiquement</strong> et à vous <strong>mettre en retrait</strong> pour soigner en sécurité.
+                    </div>
+                    <ul class="eval-items">
+                        <li><strong>Utilisation du couvert</strong> pendant les soins</li>
+                        <li><strong>Choix du moment</strong> pour intervenir</li>
+                        <li><strong>Positionnement sécurisé</strong> sur le terrain</li>
+                        <li><strong>Protection de soi</strong> et des patients</li>
+                    </ul>
+                </div>
+
+                <div class="eval-card scroll-animate">
+                    <div class="eval-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="eval-title">Gestion du Stress</div>
+                    <div class="eval-desc">
+                        Votre capacité à <strong>rester calme</strong> et <strong>efficace</strong> sous pression intense.
+                    </div>
+                    <ul class="eval-items">
+                        <li><strong>Calme</strong> sous le feu ennemi</li>
+                        <li><strong>Décisions rapides</strong> en situation critique</li>
+                        <li><strong>Priorisation des urgences</strong> vitales</li>
+                        <li><strong>Communication</strong> avec l'équipe</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card scroll-animate">
+            <h3>
+                <i class="fas fa-star"></i>
+                Les Qualités d'un Bon Médecin de Combat
+            </h3>
+
+            <div class="skills-box">
+                <h4><i class="fas fa-trophy"></i> Compétences Essentielles</h4>
+                
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <strong><i class="fas fa-bolt"></i> Réactivité</strong>
+                        <p>Intervenir <strong>immédiatement</strong> dès qu'un coéquipier est blessé, sans attendre la fin de l'engagement</p>
+                    </div>
+
+                    <div class="skill-item">
+                        <strong><i class="fas fa-list-check"></i> Priorisation</strong>
+                        <p>Savoir <strong>identifier</strong> les blessures les plus critiques et soigner en fonction de l'<strong>urgence vitale</strong></p>
+                    </div>
+
+                    <div class="skill-item">
+                        <strong><i class="fas fa-eye"></i> Conscience Situationnelle</strong>
+                        <p>Toujours surveiller le <strong>champ de bataille</strong> et être conscient des <strong>menaces environnantes</strong></p>
+                    </div>
+
+                    <div class="skill-item">
+                        <strong><i class="fas fa-arrows-left-right"></i> Flexibilité</strong>
+                        <p><strong>Alterner</strong> entre combat défensif et soins selon l'évolution de la situation tactique</p>
+                    </div>
+
+                    <div class="skill-item">
+                        <strong><i class="fas fa-shield-halved"></i> Auto-Protection</strong>
+                        <p>Se <strong>mettre en retrait</strong> et utiliser le <strong>couvert</strong> pour soigner en toute sécurité</p>
+                    </div>
+
+                    <div class="skill-item">
+                        <strong><i class="fas fa-comments"></i> Communication</strong>
+                        <p>Informer l'équipe de votre <strong>position</strong>, de l'état des blessés et de vos <strong>besoins</strong></p>
+                    </div>
+
+                    <div class="skill-item">
+                        <strong><i class="fas fa-hand-fist"></i> Sang-Froid</strong>
+                        <p>Rester <strong>calme</strong> et <strong>méthodique</strong> même dans les situations les plus chaotiques</p>
+                    </div>
+
+                    <div class="skill-item">
+                        <strong><i class="fas fa-clock"></i> Efficacité Temporelle</strong>
+                        <p>Soigner <strong>rapidement</strong> pour permettre aux blessés de retourner au combat le plus vite possible</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card scroll-animate">
+            <h3>
+                <i class="fas fa-lightbulb"></i>
+                Conseils Tactiques
+            </h3>
+
+            <div class="description-text">
+                <strong>Avant l'engagement :</strong><br>
+                • Préparez votre <strong>kit médical</strong> et vérifiez vos stocks<br>
+                • Identifiez les <strong>zones de couvert</strong> potentielles pour les soins<br>
+                • Communiquez votre <strong>position</strong> à l'équipe<br><br>
+
+                <strong>Pendant l'assaut :</strong><br>
+                • <strong>Ne vous exposez pas inutilement</strong> – un médecin mort ne sauve personne<br>
+                • <strong>Écoutez</strong> les appels à l'aide de vos coéquipiers<br>
+                • Soignez d'abord les <strong>blessures critiques</strong> (hémorragies, états critiques)<br>
+                • Utilisez les <strong>moments de répit</strong> pour soigner les blessures mineures<br>
+                • <strong>Combattez</strong> si aucun blessé n'a besoin de soins immédiats<br><br>
+
+                <strong>Gestion de zone :</strong><br>
+                • Trouvez une <strong>position retranchée</strong> pour soigner en sécurité<br>
+                • Déplacez les blessés <strong>vers le couvert</strong> si possible<br>
+                • Gardez toujours une <strong>voie de repli</strong> dégagée
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-content">
+        <div class="footer-top">
+            <div>
+                <div class="footer-title">Division Sierra</div>
+                <p>BlackHawk Mission Rescue 5</p>
+                <p>Contenu fictif créé pour le jeu</p>
+                <p>Non affilié au gouvernement français ou à l'UNO</p>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2025 Division Sierra. Tous droits réservés.
+        </div>
+    </div>
+</footer>
+
+<script>
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.scroll-animate').forEach(el => {
+        observer.observe(el);
+    });
+</script>
+</body>
+</html>
