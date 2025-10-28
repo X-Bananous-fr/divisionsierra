@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Division Sierra - Spécialité Radio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Rajdhani', sans-serif;
+        background: #0a0e1a;
+        color: #e0e0e0;
+        line-height: 1.6;
+    }
+
+    .header-strip {
+        background: linear-gradient(to right, #000091 0%, #000091 33%, #FFFFFF 33%, #FFFFFF 66%, #E1000F 66%, #E1000F 100%);
+        height: 4px;
+    }
+
+    .game-banner {
+        background: linear-gradient(135deg, #ff6b00, #ff8c00);
+        color: white;
+        text-align: center;
+        padding: 10px;
+        font-weight: 600;
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+
+    header {
+        background: rgba(15, 20, 35, 0.98);
+        padding: 18px 0;
+        border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+    }
+
+    .header-content {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 40px;
+    }
+
+    .site-title h1 {
+        font-size: 26px;
+        font-weight: 700;
+        color: #00d4ff;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        text-align: left;
+    }
+
+    .hero {
+        background: linear-gradient(135deg, #0f1423 0%, #1a1f35 100%);
+        padding: 60px 40px;
+        text-align: center;
+        border-bottom: 2px solid #00d4ff;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 200%;
+        height: 100%;
+        background-image: 
+            radial-gradient(circle, rgba(0,212,255,0.15) 1px, transparent 1px),
+            radial-gradient(circle, rgba(0,212,255,0.1) 1px, transparent 1px);
+        background-size: 50px 50px, 30px 30px;
+        background-position: 0 0, 25px 25px;
+        animation: tvStatic 8s linear infinite;
+        pointer-events: none;
+        opacity: 0.3;
+    }
+
+    @keyframes tvStatic {
+        0% {
+            transform: translateX(0) translateY(0);
+        }
+        100% {
+            transform: translateX(-50px) translateY(50px);
+        }
+    }
+
+    .hero::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(0,212,255,0.03) 2px,
+            rgba(0,212,255,0.03) 4px
+        );
+        animation: scanlines 8s linear infinite;
+        pointer-events: none;
+    }
+
+    @keyframes scanlines {
+        0% {
+            transform: translateY(0);
+        }
+        100% {
+            transform: translateY(20px);
+        }
+    }
+
+    .hero h1 {
+        font-size: 52px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 8px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-specialty {
+        font-size: 28px;
+        font-weight: 600;
+        color: #00d4ff;
+        margin-bottom: 16px;
+        letter-spacing: 1px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-subtitle {
+        font-size: 17px;
+        color: rgba(255, 255, 255, 0.75);
+        max-width: 850px;
+        margin: 0 auto 24px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-meta {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        flex-wrap: wrap;
+        position: relative;
+        z-index: 1;
+    }
+
+    .meta-badge {
+        background: rgba(0, 212, 255, 0.1);
+        border: 1px solid rgba(0, 212, 255, 0.3);
+        padding: 8px 18px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #00d4ff;
+    }
+
+    .meta-badge i {
+        margin-right: 6px;
+    }
+
+    main {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 60px 40px;
+    }
+
+    .scroll-animate {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .scroll-animate.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .alert-box {
+        background: rgba(138, 43, 226, 0.1);
+        border: 2px solid rgba(138, 43, 226, 0.4);
+        border-left: 4px solid #8a2be2;
+        padding: 24px;
+        margin-bottom: 50px;
+    }
+
+    .alert-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 20px;
+        color: #a855f7;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .alert-box p {
+        font-size: 16px;
+        color: rgba(255, 255, 255, 0.85);
+    }
+
+    .content-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 32px;
+        margin-bottom: 30px;
+    }
+
+    .content-card h3 {
+        font-size: 24px;
+        color: #00d4ff;
+        margin-bottom: 20px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .description-text {
+        background: rgba(0, 212, 255, 0.05);
+        border-left: 3px solid #00d4ff;
+        padding: 20px;
+        margin: 20px 0;
+        font-size: 15px;
+        line-height: 1.8;
+        color: rgba(255, 255, 255, 0.85);
+    }
+
+    .description-text strong {
+        color: #00d4ff;
+        font-weight: 700;
+    }
+
+    .hierarchy-box {
+        background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(138, 43, 226, 0.1));
+        border: 2px solid rgba(138, 43, 226, 0.3);
+        border-left: 4px solid #a855f7;
+        padding: 28px;
+        margin: 30px 0;
+    }
+
+    .hierarchy-box h4 {
+        color: #a855f7;
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .hierarchy-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .rank-card {
+        background: rgba(0, 0, 0, 0.4);
+        border: 2px solid rgba(168, 85, 247, 0.3);
+        padding: 20px;
+        transition: all 0.3s ease;
+    }
+
+    .rank-card:hover {
+        background: rgba(138, 43, 226, 0.1);
+        border-color: #a855f7;
+        transform: translateY(-5px);
+    }
+
+    .rank-icon {
+        font-size: 32px;
+        color: #a855f7;
+        margin-bottom: 12px;
+    }
+
+    .rank-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 8px;
+    }
+
+    .rank-desc {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.6;
+    }
+
+    .scoring-system {
+        background: rgba(255, 107, 0, 0.1);
+        border: 2px solid rgba(255, 107, 0, 0.4);
+        border-left: 4px solid #ff6b00;
+        padding: 28px;
+        margin: 30px 0;
+    }
+
+    .scoring-system h4 {
+        color: #ff8c00;
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .scoring-system p {
+        font-size: 15px;
+        color: rgba(255, 255, 255, 0.85);
+        line-height: 1.8;
+        margin-bottom: 16px;
+    }
+
+    .scoring-system strong {
+        color: #ff8c00;
+    }
+
+    .score-display {
+        background: rgba(0, 0, 0, 0.4);
+        border: 2px solid #ff8c00;
+        padding: 20px;
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .score-label {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 8px;
+    }
+
+    .score-value {
+        font-size: 48px;
+        font-weight: 700;
+        color: #ff8c00;
+    }
+
+    .malus-table {
+        margin: 30px 0;
+    }
+
+    .malus-category {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 107, 0, 0.2);
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .malus-header {
+        background: rgba(255, 107, 0, 0.15);
+        padding: 16px 20px;
+        border-left: 4px solid #ff6b00;
+    }
+
+    .malus-header h5 {
+        color: #ff8c00;
+        font-size: 18px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .malus-items {
+        padding: 16px 20px;
+    }
+
+    .malus-item {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 16px;
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .malus-item:last-child {
+        border-bottom: none;
+    }
+
+    .malus-description {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 14px;
+    }
+
+    .malus-points {
+        color: #ff6b00;
+        font-weight: 700;
+        font-size: 15px;
+        white-space: nowrap;
+    }
+
+    .bonus-box {
+        background: linear-gradient(135deg, rgba(0, 255, 157, 0.1), rgba(0, 212, 255, 0.05));
+        border: 2px solid rgba(0, 255, 157, 0.3);
+        border-left: 4px solid #00ff9d;
+        padding: 28px;
+        margin: 30px 0;
+    }
+
+    .bonus-box h4 {
+        color: #00ff9d;
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .bonus-box p {
+        font-size: 15px;
+        color: rgba(255, 255, 255, 0.85);
+        line-height: 1.8;
+    }
+
+    .bonus-box strong {
+        color: #00ff9d;
+    }
+
+    footer {
+        background: rgba(10, 14, 26, 0.98);
+        border-top: 1px solid rgba(0, 212, 255, 0.3);
+        padding: 40px 40px 24px;
+        margin-top: 60px;
+    }
+
+    .footer-content {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .footer-top {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 24px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .footer-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #00d4ff;
+        margin-bottom: 10px;
+    }
+
+    .footer-content p {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 13px;
+        margin: 4px 0;
+    }
+
+    .copyright {
+        text-align: center;
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 12px;
+    }
+
+    @media (max-width: 768px) {
+        .hero h1 {
+            font-size: 36px;
+        }
+
+        .hero-specialty {
+            font-size: 22px;
+        }
+
+        .hierarchy-grid {
+            grid-template-columns: 1fr;
+        }
+
+        main {
+            padding: 40px 20px;
+        }
+
+        .footer-top {
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .malus-item {
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+    }
+</style>
+</head>
+<body>
+    <div class="header-strip"></div>
+<div class="game-banner">
+    <i class="fas fa-gamepad"></i> CONTENU FICTIF - JEU BLACKHAWK MISSION RESCUE 5
+</div>
+
+<header>
+    <div class="header-content">
+        <div class="site-title">
+            <h1>Division Sierra</h1>
+        </div>
+    </div>
+</header>
+
+<div class="hero">
+    <h1>Spécialité sans formation</h1>
+    <div class="hero-specialty"><i class="fas fa-tower-broadcast"></i> OPÉRATEUR RADIO</div>
+    <p class="hero-subtitle">
+        La spécialité Radio est unique au sein de la Division Sierra. Ce n'est pas une formation classique, mais une évaluation continue de vos compétences en communication tactique sur le terrain. Devenez le lien vital entre votre escouade et le commandement.
+    </p>
+    <div class="hero-meta">
+        <div class="meta-badge">
+            <i class="fas fa-infinity"></i>
+            Évaluation Continue
+        </div>
+        <div class="meta-badge">
+            <i class="fas fa-graduation-cap"></i>
+            Pas de Formation Requise
+        </div>
+        <div class="meta-badge">
+            <i class="fas fa-star"></i>
+            Accessible à tout Moment
+        </div>
+    </div>
+</div>
+
+<main>
+    <div class="alert-box scroll-animate">
+        <div class="alert-title">
+            <i class="fas fa-info-circle"></i>
+            Système d'Évaluation Unique
+        </div>
+        <p>Cette spécialité <strong>ne nécessite aucune formation préalable</strong>. Vous pouvez devenir Opérateur Radio <strong>à tout moment</strong> en démontrant vos compétences sur le terrain. Votre performance est évaluée en <strong>continu</strong> lors de vos missions opérationnelles réelles.</p>
+    </div>
+
+    <div class="content-card scroll-animate">
+        <h3>
+            <i class="fas fa-users"></i>
+            Rôle de l'Opérateur Radio
+        </h3>
+        <div class="description-text">
+            En tant qu'<strong>Opérateur Radio</strong>, vous êtes le <strong>lien de communication vital</strong> entre votre escouade et le reste de la Division Sierra. Vous travaillez en <strong>binôme direct</strong> avec le <strong>Chef d'Escouade</strong> et assurez les communications avec les <strong>autres escouades</strong> ainsi qu'avec le <strong>haut commandement</strong>. Votre rôle est de transmettre les informations <strong>clairement</strong>, <strong>rapidement</strong> et <strong>sans erreur</strong>, même sous la pression du combat.
+        </div>
+
+        <div class="hierarchy-box">
+            <h4><i class="fas fa-sitemap"></i> Chaîne de Communication</h4>
+            <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 20px;">
+                En tant qu'Opérateur Radio, vous communiquez avec plusieurs niveaux de la hiérarchie militaire :
+            </p>
+
+            <div class="hierarchy-grid">
+                <div class="rank-card">
+                    <div class="rank-icon"><i class="fas fa-user-tie"></i></div>
+                    <div class="rank-title">Chef d'Escouade</div>
+                    <div class="rank-desc">
+                        Votre <strong>supérieur direct</strong>. Vous relayez ses ordres et transmettez les informations terrain.
+                    </div>
+                </div>
+
+                <div class="rank-card">
+                    <div class="rank-icon"><i class="fas fa-users-gear"></i></div>
+                    <div class="rank-title">Autres Escouades</div>
+                    <div class="rank-desc">
+                        Communication <strong>inter-escouades</strong> pour la coordination des opérations tactiques.
+                    </div>
+                </div>
+
+                <div class="rank-card">
+                    <div class="rank-icon"><i class="fas fa-star"></i></div>
+                    <div class="rank-title">Sierra Un</div>
+                    <div class="rank-desc">
+                        <strong>Général de Corps d'Armée</strong> - Commandement stratégique de plus haut niveau.
+                    </div>
+                </div>
+
+                <div class="rank-card">
+                    <div class="rank-icon"><i class="fas fa-medal"></i></div>
+                    <div class="rank-title">Général de Division</div>
+                    <div class="rank-desc">
+                        Officier supérieur coordonnant les <strong>opérations de division</strong>.
+                    </div>
+                </div>
+
+                <div class="rank-card">
+                    <div class="rank-icon"><i class="fas fa-shield"></i></div>
+                    <div class="rank-title">Sierra Cinq</div>
+                    <div class="rank-desc">
+                        <strong>Général de Brigade</strong> - Coordination des brigades opérationnelles.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-card scroll-animate">
+        <h3>
+            <i class="fas fa-chart-line"></i>
+            Système de Notation Continue
+        </h3>
+
+        <div class="scoring-system">
+            <h4><i class="fas fa-calculator"></i> Fonctionnement de la Note</h4>
+            <p>
+                Tous les Opérateurs Radio commencent avec une <strong>note de base de 50 points</strong>. Cette note <strong>évolue uniquement à la baisse</strong> en cas d'erreurs de communication. Il n'y a <strong>pas de points bonus</strong> attribués directement.
+            </p>
+            <p>
+                <strong>Le principe :</strong> Chaque erreur entraîne une <strong>pénalité immédiate</strong> qui diminue votre note. Cependant, en accomplissant des <strong>missions réussies</strong> avec une bonne communication, vous pouvez <strong>récupérer périodiquement des points</strong> pour compenser les erreurs passées et maintenir un score élevé.
+            </p>
+
+            <div class="score-display">
+                <div class="score-label">NOTE DE BASE</div>
+                <div class="score-value">50</div>
+            </div>
+        </div>
+
+        <div class="bonus-box scroll-animate">
+            <h4><i class="fas fa-arrow-trend-up"></i> Récupération Périodique de Points</h4>
+            <p>
+                Bien qu'il n'y ait pas de bonus directs, vous pouvez <strong>regagner des points</strong> de manière périodique :<br><br>
+                
+                • <strong>Missions réussies</strong> : Accomplir des missions sans erreur de communication permet de <strong>récupérer des points perdus</strong><br>
+                • <strong>Performance exemplaire</strong> : Une communication <strong>claire et efficace</strong> sur plusieurs missions consécutives peut restaurer votre note<br>
+                • <strong>Opérations complexes</strong> : Gérer avec succès des communications lors d'opérations multi-escouades rapporte davantage de points<br><br>
+                
+                <strong>Exemple :</strong> Si vous perdez 5 points suite à une erreur, mais que vous accomplissez ensuite 2-3 missions avec une communication parfaite, vous pouvez récupérer ces 5 points progressivement.
+            </p>
+        </div>
+    </div>
+
+    <div class="content-card scroll-animate">
+        <h3>
+            <i class="fas fa-triangle-exclamation"></i>
+            Pénalités et Malus
+        </h3>
+
+        <div class="malus-table">
+            <div class="malus-category">
+                <div class="malus-header">
+                    <h5><i class="fas fa-comment-slash"></i> Erreurs de Communication</h5>
+                </div>
+                <div class="malus-items">
+                    <div class="malus-item">
+                        <div class="malus-description">Message incomplet ou peu clair</div>
+                        <div class="malus-points">-1 point</div>
+                    </div>
+                    <div class="malus-item">
+                        <div class="malus-description">Mauvaise transmission d'informations tactiques</div>
+                        <div class="malus-points">-2 points</div>
+                    </div>
+                    <div class="malus-item">
+                        <div class="malus-description">Oubli de transmettre un message important</div>
+                        <div class="malus-points">-3 points</div>
+                    </div>
+                    <div class="malus-item">
+                        <div class="malus-description">Information erronée transmise au commandement</div>
+                        <div class="malus-points">-5 points</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="malus-category scroll-animate">
+                <div class="malus-header">
+                    <h5><i class="fas fa-ban"></i> Protocole et Discipline</h5>
+                </div>
+                <div class="malus-items">
+                    <div class="malus-item">
+                        <div class="malus-description">Non-respect du jargon militaire approprié</div>
+                        <div class="malus-points">-1 point</div>
+                    </div>
+                    <div class="malus-item">
+                        <div class="malus-description">Communication sur le mauvais canal</div>
+                        <div class="malus-points">-2 points</div>
+                    </div>
+                    <div class="malus-item">
+                        <div class="malus-description">Rupture de silence radio non autorisée</div>
+                        <div class="malus-points">-3 points</div>
+                    </div>
+                    <div class="malus-item">
+                        <div class="malus-description">Divulgation d'informations sensibles sur canal non sécurisé</div>
+                        <div class="malus-points">-5 points</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="malus-category scroll-animate">
+                <div class="malus-header">
+                    <h5><i class="fas fa-clock"></i> Réactivité et Timing</h5>
+                </div>
+                <div class="malus-items">
+                    <div class="malus-item">
+                        <div class="malus-description">Délai excessif dans la transmission d'un message</div>
+                        <div class="malus-points">-2 points</div>
+                    </div>
+                    <div class="malus-item">
+                        <div class="malus-description">Non-réponse à un appel du commandement</div>
+                        <div class="malus-points">-3 points</div>
+                    </div>
+                    <div class="malus-item">
+                        <div class="malus-description">Retard critique dans transmission d'urgence</div>
+                        <div class="malus-points">-5 points</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="malus-category scroll-animate">
+                <div class="malus-header">
+                    <h5><i class="fas fa-burst"></i> Erreurs Critiques</h5>
+                </div>
+                <div class="malus-items">
+                    <div class="malus-item">
+                        <div class="malus-description">Confusion entre escouades causant un incident</div>
+                        <div class="malus-points">-7 points</div>
+                    </div>
+                    <div class="malus-item">
+                        <div class="malus-description">Mauvaise transmission de coordonnées tactiques</div>
+                        <div class="malus-points">-8 points</div>
+                    </div>
+                    <div class="malus-item">
+                        <div class="malus-description">Erreur entraînant des pertes ou échec de mission</div>
+                        <div class="malus-points">-10 points</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="description-text" style="background: rgba(255, 107, 0, 0.08); border-left-color: #ff6b00; margin-top: 30px;">
+            <strong>⚠️ IMPORTANT :</strong> Les pénalités s'accumulent sur toute votre carrière d'Opérateur Radio. Une note trop basse peut entraîner le <strong>retrait de votre spécialité</strong>. Visez toujours la <strong>perfection</strong> dans vos communications pour maintenir un score élevé et récupérer les points perdus via des missions réussies.
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-content">
+        <div class="footer-top">
+            <div>
+                <div class="footer-title">Division Sierra</div>
+                <p>BlackHawk Mission Rescue 5</p>
+                <p>Contenu fictif créé pour le jeu</p>
+                <p>Non affilié au gouvernement français ou à l'UNO</p>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2025 Division Sierra. Tous droits réservés.
+        </div>
+    </div>
+</footer>
+
+<script>
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.scroll-animate').forEach(el => {
+        observer.observe(el);
+    });
+</script>
+</body>
+</html>
