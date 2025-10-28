@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Division Sierra - Formation Spécialité Éclaireur</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Rajdhani', sans-serif;
+        background: #0a0e1a;
+        color: #e0e0e0;
+        line-height: 1.6;
+    }
+
+    .header-strip {
+        background: linear-gradient(to right, #000091 0%, #000091 33%, #FFFFFF 33%, #FFFFFF 66%, #E1000F 66%, #E1000F 100%);
+        height: 4px;
+    }
+
+    .game-banner {
+        background: linear-gradient(135deg, #ff6b00, #ff8c00);
+        color: white;
+        text-align: center;
+        padding: 10px;
+        font-weight: 600;
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+
+    header {
+        background: rgba(15, 20, 35, 0.98);
+        padding: 18px 0;
+        border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+    }
+
+    .header-content {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 40px;
+    }
+
+    .site-title h1 {
+        font-size: 26px;
+        font-weight: 700;
+        color: #00d4ff;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        text-align: left;
+    }
+
+    .hero {
+        background: linear-gradient(135deg, #0f1423 0%, #1a1f35 100%);
+        padding: 60px 40px;
+        text-align: center;
+        border-bottom: 2px solid #00d4ff;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 200%;
+        height: 100%;
+        background-image: 
+            radial-gradient(circle, rgba(0,212,255,0.15) 1px, transparent 1px),
+            radial-gradient(circle, rgba(0,212,255,0.1) 1px, transparent 1px);
+        background-size: 50px 50px, 30px 30px;
+        background-position: 0 0, 25px 25px;
+        animation: tvStatic 8s linear infinite;
+        pointer-events: none;
+        opacity: 0.3;
+    }
+
+    @keyframes tvStatic {
+        0% {
+            transform: translateX(0) translateY(0);
+        }
+        100% {
+            transform: translateX(-50px) translateY(50px);
+        }
+    }
+
+    .hero::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(0,212,255,0.03) 2px,
+            rgba(0,212,255,0.03) 4px
+        );
+        animation: scanlines 8s linear infinite;
+        pointer-events: none;
+    }
+
+    @keyframes scanlines {
+        0% {
+            transform: translateY(0);
+        }
+        100% {
+            transform: translateY(20px);
+        }
+    }
+
+    .hero h1 {
+        font-size: 52px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 8px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-specialty {
+        font-size: 28px;
+        font-weight: 600;
+        color: #00d4ff;
+        margin-bottom: 16px;
+        letter-spacing: 1px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-subtitle {
+        font-size: 17px;
+        color: rgba(255, 255, 255, 0.75);
+        max-width: 850px;
+        margin: 0 auto 24px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-meta {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        flex-wrap: wrap;
+        position: relative;
+        z-index: 1;
+    }
+
+    .meta-badge {
+        background: rgba(0, 212, 255, 0.1);
+        border: 1px solid rgba(0, 212, 255, 0.3);
+        padding: 8px 18px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #00d4ff;
+    }
+
+    .meta-badge i {
+        margin-right: 6px;
+    }
+
+    main {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 60px 40px;
+    }
+
+    .scroll-animate {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .scroll-animate.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .alert-box {
+        background: rgba(255, 193, 7, 0.1);
+        border: 2px solid rgba(255, 193, 7, 0.4);
+        border-left: 4px solid #ffc107;
+        padding: 24px;
+        margin-bottom: 50px;
+    }
+
+    .alert-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 20px;
+        color: #ffc107;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .alert-box p {
+        font-size: 16px;
+        color: rgba(255, 255, 255, 0.85);
+    }
+
+    .mission-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 32px;
+        margin-bottom: 30px;
+    }
+
+    .mission-card h3 {
+        font-size: 24px;
+        color: #00d4ff;
+        margin-bottom: 20px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .description-text {
+        background: rgba(0, 212, 255, 0.05);
+        border-left: 3px solid #00d4ff;
+        padding: 20px;
+        margin: 20px 0;
+        font-size: 15px;
+        line-height: 1.8;
+        color: rgba(255, 255, 255, 0.85);
+    }
+
+    .description-text strong {
+        color: #00d4ff;
+        font-weight: 700;
+    }
+
+    .objectives-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin: 30px 0;
+    }
+
+    .objective-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 2px solid rgba(0, 212, 255, 0.2);
+        padding: 24px;
+        transition: all 0.3s ease;
+    }
+
+    .objective-card:hover {
+        background: rgba(0, 212, 255, 0.08);
+        border-color: #00d4ff;
+        transform: translateY(-5px);
+    }
+
+    .objective-icon {
+        font-size: 36px;
+        color: #00d4ff;
+        margin-bottom: 16px;
+        text-align: center;
+    }
+
+    .objective-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 12px;
+        text-align: center;
+    }
+
+    .objective-desc {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.75);
+        line-height: 1.7;
+        margin-bottom: 16px;
+    }
+
+    .objective-desc strong {
+        color: #00d4ff;
+    }
+
+    .objective-points {
+        background: linear-gradient(135deg, #00d4ff, #0095ff);
+        padding: 10px;
+        text-align: center;
+        font-weight: 700;
+        color: #0a0e1a;
+        font-size: 16px;
+    }
+
+    .stealth-tips {
+        background: linear-gradient(135deg, rgba(138, 43, 226, 0.1), rgba(75, 0, 130, 0.1));
+        border: 2px solid rgba(138, 43, 226, 0.3);
+        border-left: 4px solid #8a2be2;
+        padding: 24px;
+        margin: 30px 0;
+    }
+
+    .stealth-tips h4 {
+        color: #a855f7;
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .stealth-tips ul {
+        list-style: none;
+        margin-top: 16px;
+    }
+
+    .stealth-tips li {
+        padding: 8px 0;
+        padding-left: 24px;
+        position: relative;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 14px;
+    }
+
+    .stealth-tips li::before {
+        content: '▸';
+        position: absolute;
+        left: 0;
+        color: #a855f7;
+        font-weight: 700;
+    }
+
+    footer {
+        background: rgba(10, 14, 26, 0.98);
+        border-top: 1px solid rgba(0, 212, 255, 0.3);
+        padding: 40px 40px 24px;
+        margin-top: 60px;
+    }
+
+    .footer-content {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .footer-top {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 24px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .footer-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #00d4ff;
+        margin-bottom: 10px;
+    }
+
+    .footer-content p {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 13px;
+        margin: 4px 0;
+    }
+
+    .copyright {
+        text-align: center;
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 12px;
+    }
+
+    @media (max-width: 768px) {
+        .hero h1 {
+            font-size: 36px;
+        }
+
+        .hero-specialty {
+            font-size: 22px;
+        }
+
+        .objectives-grid {
+            grid-template-columns: 1fr;
+        }
+
+        main {
+            padding: 40px 20px;
+        }
+
+        .footer-top {
+            flex-direction: column;
+            gap: 20px;
+        }
+    }
+</style>
+</head>
+<body>
+    <div class="header-strip"></div>
+<div class="game-banner">
+    <i class="fas fa-gamepad"></i> CONTENU FICTIF - JEU BLACKHAWK MISSION RESCUE 5
+</div>
+
+<header>
+    <div class="header-content">
+        <div class="site-title">
+            <h1>Division Sierra</h1>
+        </div>
+    </div>
+</header>
+
+<div class="hero">
+    <h1>Formation de Spécialité</h1>
+    <div class="hero-specialty"><i class="fas fa-eye"></i> ÉCLAIREUR</div>
+    <p class="hero-subtitle">
+        Formation avancée pour les éclaireurs de la Division Sierra. Infiltrez les zones hostiles en mode furtif, récoltez un maximum de renseignements et éliminez les cibles prioritaires sans vous faire repérer.
+    </p>
+    <div class="hero-meta">
+        <div class="meta-badge">
+            <i class="fas fa-clock"></i>
+            Durée : 10 minutes
+        </div>
+        <div class="meta-badge">
+            <i class="fas fa-chart-line"></i>
+            Total : 50 points
+        </div>
+        <div class="meta-badge">
+            <i class="fas fa-map-marked-alt"></i>
+            Zone : Ronograd City
+        </div>
+    </div>
+</div>
+
+<main>
+    <div class="alert-box scroll-animate">
+        <div class="alert-title">
+            <i class="fas fa-exclamation-triangle"></i>
+            Critères de Validation
+        </div>
+        <p>La formation est notée sur <strong>50 points</strong>. Vous disposez de <strong>10 minutes</strong> pour infiltrer la ville hostile de <strong>Ronograd City</strong>, récolter un maximum d'<strong>informations stratégiques</strong> et éliminer des cibles en <strong>mode furtif</strong>. La discrétion est votre meilleure alliée.</p>
+    </div>
+
+    <div class="mission-card scroll-animate">
+        <h3>
+            <i class="fas fa-binoculars"></i>
+            Mission de Reconnaissance
+        </h3>
+        <div class="description-text">
+            Vous êtes déployé seul dans la <strong>zone hostile de Ronograd City</strong>. Votre objectif est d'<strong>avancer profondément</strong> dans la zone ennemie, de <strong>collecter des renseignements tactiques</strong> (positions ennemies, installations, routes d'approvisionnement) et d'<strong>éliminer discrètement</strong> les cibles d'opportunité. Vous devez rester en <strong>mode furtif</strong> le plus longtemps possible – toute détection réduit significativement votre score.
+        </div>
+
+        <div class="objectives-grid">
+            <div class="objective-card scroll-animate">
+                <div class="objective-icon">
+                    <i class="fas fa-file-lines"></i>
+                </div>
+                <div class="objective-title">Collecte de Renseignements</div>
+                <div class="objective-desc">
+                    <strong>Récoltez le maximum d'informations</strong> stratégiques :<br>
+                    • <strong>Positions ennemies</strong><br>
+                    • <strong>Installations militaires</strong><br>
+                    • <strong>Points faibles</strong> de la défense<br>
+                    • <strong>Mouvements</strong> de troupes
+                </div>
+                <div class="objective-points">Jusqu'à 25 POINTS</div>
+            </div>
+
+            <div class="objective-card scroll-animate">
+                <div class="objective-icon">
+                    <i class="fas fa-crosshairs"></i>
+                </div>
+                <div class="objective-title">Éliminations Furtives</div>
+                <div class="objective-desc">
+                    <strong>Neutralisez des ennemis</strong> en mode furtif :<br>
+                    • <strong>+2 points</strong> par kill furtif<br>
+                    • <strong>+5 points bonus</strong> pour officier éliminé<br>
+                    • <strong>Aucun bruit</strong>, aucune alerte
+                </div>
+                <div class="objective-points">Jusqu'à 15 POINTS</div>
+            </div>
+
+            <div class="objective-card scroll-animate">
+                <div class="objective-icon">
+                    <i class="fas fa-user-ninja"></i>
+                </div>
+                <div class="objective-title">Mode Furtif</div>
+                <div class="objective-desc">
+                    <strong>Restez invisible</strong> pendant toute la mission :<br>
+                    • <strong>-5 points</strong> si repéré<br>
+                    • <strong>-10 points</strong> si alerte générale<br>
+                    • <strong>Bonus +10</strong> si jamais détecté
+                </div>
+                <div class="objective-points">Jusqu'à 10 POINTS</div>
+            </div>
+        </div>
+
+        <div class="stealth-tips scroll-animate">
+            <h4><i class="fas fa-lightbulb"></i> Conseils pour Rester Furtif</h4>
+            <ul>
+                <li><strong>Utilisez les ombres</strong> et restez à couvert en permanence</li>
+                <li><strong>Éliminez les ennemis isolés</strong> loin des patrouilles</li>
+                <li><strong>Cachez les corps</strong> pour éviter d'alerter d'autres gardes</li>
+                <li><strong>Désactivez les communications</strong> ennemies si possible</li>
+                <li><strong>Privilégiez les armes silencieuses</strong> (couteau, armes avec silencieux)</li>
+                <li><strong>Observez les patterns de patrouille</strong> avant d'agir</li>
+                <li><strong>Avancez lentement</strong> et méthodiquement</li>
+            </ul>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-content">
+        <div class="footer-top">
+            <div>
+                <div class="footer-title">Division Sierra</div>
+                <p>BlackHawk Mission Rescue 5</p>
+                <p>Contenu fictif créé pour le jeu</p>
+                <p>Non affilié au gouvernement français ou à l'UNO</p>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2025 Division Sierra. Tous droits réservés.
+        </div>
+    </div>
+</footer>
+
+<script>
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.scroll-animate').forEach(el => {
+        observer.observe(el);
+    });
+</script>
+</body>
+</html>
